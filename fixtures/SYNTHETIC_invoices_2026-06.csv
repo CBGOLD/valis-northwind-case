@@ -1,0 +1,28 @@
+invoice_id,deal_id,brand,amount_usd,invoice_date,status
+INV-401,BD-2606-01,Cascade Skincare,44250,2026-06-23,issued
+INV-402,BD-2606-02,Lumen Audio,82250,2026-06-10,issued
+INV-403,BD-2606-03,Vela Cosmetics,21500,2026-07-03,issued
+INV-404,BD-2606-04,Copperleaf Home,94250,2026-06-18,issued
+INV-405,BD-2606-05,Vela Cosmetics,21750,2026-06-03,issued
+INV-406,BD-2606-06,Fernwood Outdoors,83000,2026-06-07,issued
+INV-407,BD-2606-07,Atlas Gaming,89750,2026-07-02,paid
+INV-408,BD-2606-08,Meridian Travel,42195,2026-06-07,paid
+INV-409,BD-2606-10,Nimbus Athletics,34000,2026-06-22,paid
+INV-410,BD-2606-11,Meridian Travel,63292,2026-06-30,issued
+INV-411,BD-2606-12,Orbit Snacks,70000,2026-06-30,issued
+INV-412,BD-2606-13,Cascade Skincare,92250,2026-06-06,paid
+INV-413,BD-2606-14,Nimbus Athletics,48500,2026-06-28,paid
+INV-414,BD-2606-15,Bluebird Software,62500,2026-06-30,issued
+INV-415,BD-2606-16,Fernwood Outdoors,95000,2026-06-25,issued
+INV-416,BD-2606-17,Copperleaf Home,19000,2026-06-19,issued
+INV-417,BD-2606-18,Cascade Skincare,22250,2026-06-21,paid
+INV-418,BD-2606-19,Solstice Beverages,20250,2026-06-29,paid
+INV-419,BD-2606-20,Truepath Finance,38750,2026-06-05,paid
+INV-420,BD-2606-21,Nimbus Athletics,95750,2026-06-07,issued
+INV-421,BD-2606-22,Meridian Travel,20750,2026-06-30,issued
+INV-422,BD-2606-23,Orbit Snacks,88000,2026-06-28,issued
+INV-423,BD-2606-24,Nimbus Athletics,44250,2026-06-20,issued
+INV-424,BD-2606-25,Vela Cosmetics,94250,2026-06-22,paid
+INV-425,BD-2606-26,Atlas Gaming,28250,2026-06-21,issued
+INV-426,BD-2606-27,Copperleaf Home,23500,2026-06-04,issued
+INV-427,BD-2606-77,Vantage Point Media,24500,2026-06-26,issued

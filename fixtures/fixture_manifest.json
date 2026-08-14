@@ -1,0 +1,19 @@
+{
+  "WARNING": "SYNTHETIC FIXTURE \u2014 generated data, NOT Northwind actuals. See fixtures/README.md.",
+  "seed": 26,
+  "month": "2026-06",
+  "n_crm_deals": 27,
+  "n_invoices": 27,
+  "n_payout_rows": 40,
+  "injected_answer_key": {
+    "BD-2606-08": "AMOUNT_MISMATCH",
+    "BD-2606-11": "AMOUNT_MISMATCH",
+    "BD-2606-03": "DATE_SLIP",
+    "BD-2606-07": "DATE_SLIP",
+    "BD-2606-09": "MISSING_INVOICE",
+    "BD-2606-26": "PAYOUT_SPLIT_MISMATCH",
+    "BD-2606-14": "DUPLICATE_PAYOUT",
+    "BD-2606-77": "MISSING_IN_CRM"
+  },
+  "note": "The reconciliation engine never reads this manifest; tests use it to score the engine."
+}

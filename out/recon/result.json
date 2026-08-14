@@ -1,0 +1,278 @@
+{
+  "inputs": {
+    "crm": {
+      "path": "fixtures/SYNTHETIC_crm_deals_2026-06.csv",
+      "rows": 27,
+      "total_cents": 151550000
+    },
+    "invoices": {
+      "path": "fixtures/SYNTHETIC_invoices_2026-06.csv",
+      "rows": 27
+    },
+    "payouts": {
+      "path": "fixtures/SYNTHETIC_payouts_2026-06.csv",
+      "rows": 40
+    }
+  },
+  "cleared": [
+    {
+      "deal_id": "BD-2606-01",
+      "brand": "Cascade Skincare",
+      "amount_usd": "44250",
+      "invoice_ids": "INV-401",
+      "payout_total_usd": "28762.50",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:2;SYNTHETIC_invoices_2026-06.csv:2;SYNTHETIC_payouts_2026-06.csv:2"
+    },
+    {
+      "deal_id": "BD-2606-02",
+      "brand": "Lumen Audio",
+      "amount_usd": "82250",
+      "invoice_ids": "INV-402",
+      "payout_total_usd": "61687.50",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:3;SYNTHETIC_invoices_2026-06.csv:3;SYNTHETIC_payouts_2026-06.csv:3;SYNTHETIC_payouts_2026-06.csv:4"
+    },
+    {
+      "deal_id": "BD-2606-04",
+      "brand": "Copperleaf Home",
+      "amount_usd": "94250",
+      "invoice_ids": "INV-404",
+      "payout_total_usd": "65975",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:5;SYNTHETIC_invoices_2026-06.csv:5;SYNTHETIC_payouts_2026-06.csv:6"
+    },
+    {
+      "deal_id": "BD-2606-05",
+      "brand": "Vela Cosmetics",
+      "amount_usd": "21750",
+      "invoice_ids": "INV-405",
+      "payout_total_usd": "16312.50",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:6;SYNTHETIC_invoices_2026-06.csv:6;SYNTHETIC_payouts_2026-06.csv:7;SYNTHETIC_payouts_2026-06.csv:8"
+    },
+    {
+      "deal_id": "BD-2606-06",
+      "brand": "Fernwood Outdoors",
+      "amount_usd": "83000",
+      "invoice_ids": "INV-406",
+      "payout_total_usd": "58100",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:7;SYNTHETIC_invoices_2026-06.csv:7;SYNTHETIC_payouts_2026-06.csv:9;SYNTHETIC_payouts_2026-06.csv:10"
+    },
+    {
+      "deal_id": "BD-2606-10",
+      "brand": "Nimbus Athletics",
+      "amount_usd": "34000",
+      "invoice_ids": "INV-409",
+      "payout_total_usd": "22100",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:11;SYNTHETIC_invoices_2026-06.csv:10;SYNTHETIC_payouts_2026-06.csv:15"
+    },
+    {
+      "deal_id": "BD-2606-12",
+      "brand": "Orbit Snacks",
+      "amount_usd": "70000",
+      "invoice_ids": "INV-411",
+      "payout_total_usd": "49000",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:13;SYNTHETIC_invoices_2026-06.csv:12;SYNTHETIC_payouts_2026-06.csv:17"
+    },
+    {
+      "deal_id": "BD-2606-13",
+      "brand": "Cascade Skincare",
+      "amount_usd": "92250",
+      "invoice_ids": "INV-412",
+      "payout_total_usd": "64575",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:14;SYNTHETIC_invoices_2026-06.csv:13;SYNTHETIC_payouts_2026-06.csv:18"
+    },
+    {
+      "deal_id": "BD-2606-15",
+      "brand": "Bluebird Software",
+      "amount_usd": "62500",
+      "invoice_ids": "INV-414",
+      "payout_total_usd": "43750",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:16;SYNTHETIC_invoices_2026-06.csv:15;SYNTHETIC_payouts_2026-06.csv:21"
+    },
+    {
+      "deal_id": "BD-2606-16",
+      "brand": "Fernwood Outdoors",
+      "amount_usd": "95000",
+      "invoice_ids": "INV-415",
+      "payout_total_usd": "61750",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:17;SYNTHETIC_invoices_2026-06.csv:16;SYNTHETIC_payouts_2026-06.csv:22"
+    },
+    {
+      "deal_id": "BD-2606-17",
+      "brand": "Copperleaf Home",
+      "amount_usd": "19000",
+      "invoice_ids": "INV-416",
+      "payout_total_usd": "14250",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:18;SYNTHETIC_invoices_2026-06.csv:17;SYNTHETIC_payouts_2026-06.csv:23;SYNTHETIC_payouts_2026-06.csv:24"
+    },
+    {
+      "deal_id": "BD-2606-18",
+      "brand": "Cascade Skincare",
+      "amount_usd": "22250",
+      "invoice_ids": "INV-417",
+      "payout_total_usd": "16687.50",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:19;SYNTHETIC_invoices_2026-06.csv:18;SYNTHETIC_payouts_2026-06.csv:25;SYNTHETIC_payouts_2026-06.csv:26"
+    },
+    {
+      "deal_id": "BD-2606-19",
+      "brand": "Solstice Beverages",
+      "amount_usd": "20250",
+      "invoice_ids": "INV-418",
+      "payout_total_usd": "13162.50",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:20;SYNTHETIC_invoices_2026-06.csv:19;SYNTHETIC_payouts_2026-06.csv:27;SYNTHETIC_payouts_2026-06.csv:28"
+    },
+    {
+      "deal_id": "BD-2606-20",
+      "brand": "Truepath Finance",
+      "amount_usd": "38750",
+      "invoice_ids": "INV-419",
+      "payout_total_usd": "25187.50",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:21;SYNTHETIC_invoices_2026-06.csv:20;SYNTHETIC_payouts_2026-06.csv:29"
+    },
+    {
+      "deal_id": "BD-2606-21",
+      "brand": "Nimbus Athletics",
+      "amount_usd": "95750",
+      "invoice_ids": "INV-420",
+      "payout_total_usd": "71812.50",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:22;SYNTHETIC_invoices_2026-06.csv:21;SYNTHETIC_payouts_2026-06.csv:30;SYNTHETIC_payouts_2026-06.csv:31"
+    },
+    {
+      "deal_id": "BD-2606-22",
+      "brand": "Meridian Travel",
+      "amount_usd": "20750",
+      "invoice_ids": "INV-421",
+      "payout_total_usd": "14525",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:23;SYNTHETIC_invoices_2026-06.csv:22;SYNTHETIC_payouts_2026-06.csv:32"
+    },
+    {
+      "deal_id": "BD-2606-23",
+      "brand": "Orbit Snacks",
+      "amount_usd": "88000",
+      "invoice_ids": "INV-422",
+      "payout_total_usd": "57200",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:24;SYNTHETIC_invoices_2026-06.csv:23;SYNTHETIC_payouts_2026-06.csv:33"
+    },
+    {
+      "deal_id": "BD-2606-24",
+      "brand": "Nimbus Athletics",
+      "amount_usd": "44250",
+      "invoice_ids": "INV-423",
+      "payout_total_usd": "30975",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:25;SYNTHETIC_invoices_2026-06.csv:24;SYNTHETIC_payouts_2026-06.csv:34;SYNTHETIC_payouts_2026-06.csv:35"
+    },
+    {
+      "deal_id": "BD-2606-25",
+      "brand": "Vela Cosmetics",
+      "amount_usd": "94250",
+      "invoice_ids": "INV-424",
+      "payout_total_usd": "65975",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:26;SYNTHETIC_invoices_2026-06.csv:25;SYNTHETIC_payouts_2026-06.csv:36;SYNTHETIC_payouts_2026-06.csv:37"
+    },
+    {
+      "deal_id": "BD-2606-27",
+      "brand": "Copperleaf Home",
+      "amount_usd": "23500",
+      "invoice_ids": "INV-426",
+      "payout_total_usd": "16450",
+      "evidence": "SYNTHETIC_crm_deals_2026-06.csv:28;SYNTHETIC_invoices_2026-06.csv:27;SYNTHETIC_payouts_2026-06.csv:40;SYNTHETIC_payouts_2026-06.csv:41"
+    }
+  ],
+  "exceptions": [
+    {
+      "deal_id": "BD-2606-03",
+      "category": "DATE_SLIP",
+      "detail": "close 2026-06-22 vs invoice 2026-07-03 \u2014 revenue period ambiguous",
+      "evidence": [
+        "SYNTHETIC_crm_deals_2026-06.csv:4",
+        "SYNTHETIC_invoices_2026-06.csv:4"
+      ]
+    },
+    {
+      "deal_id": "BD-2606-07",
+      "category": "DATE_SLIP",
+      "detail": "close 2026-06-11 vs invoice 2026-07-02 \u2014 revenue period ambiguous",
+      "evidence": [
+        "SYNTHETIC_crm_deals_2026-06.csv:8",
+        "SYNTHETIC_invoices_2026-06.csv:8"
+      ]
+    },
+    {
+      "deal_id": "BD-2606-08",
+      "category": "AMOUNT_MISMATCH",
+      "detail": "CRM $43,500 vs invoiced $42,195 (delta -$1,305)",
+      "evidence": [
+        "SYNTHETIC_crm_deals_2026-06.csv:9",
+        "SYNTHETIC_invoices_2026-06.csv:9"
+      ]
+    },
+    {
+      "deal_id": "BD-2606-09",
+      "category": "MISSING_INVOICE",
+      "detail": "deal closed in CRM at $72,750 on 2026-06-17, no invoice raised",
+      "evidence": [
+        "SYNTHETIC_crm_deals_2026-06.csv:10"
+      ]
+    },
+    {
+      "deal_id": "BD-2606-11",
+      "category": "AMOUNT_MISMATCH",
+      "detail": "CRM $65,250 vs invoiced $63,292 (delta -$1,958)",
+      "evidence": [
+        "SYNTHETIC_crm_deals_2026-06.csv:12",
+        "SYNTHETIC_invoices_2026-06.csv:11"
+      ]
+    },
+    {
+      "deal_id": "BD-2606-14",
+      "category": "DUPLICATE_PAYOUT",
+      "detail": "1 payout row(s) entered more than once (PAY-918)",
+      "evidence": [
+        "SYNTHETIC_payouts_2026-06.csv:19",
+        "SYNTHETIC_payouts_2026-06.csv:20"
+      ]
+    },
+    {
+      "deal_id": "BD-2606-26",
+      "category": "PAYOUT_SPLIT_MISMATCH",
+      "detail": "paid $20,374.50 vs expected $21,187.50 (75% of $28,250; delta -$813)",
+      "evidence": [
+        "SYNTHETIC_crm_deals_2026-06.csv:27",
+        "SYNTHETIC_payouts_2026-06.csv:38",
+        "SYNTHETIC_payouts_2026-06.csv:39"
+      ]
+    },
+    {
+      "deal_id": "BD-2606-77",
+      "category": "MISSING_IN_CRM",
+      "detail": "invoice(s) totaling $24,500 have no CRM deal behind them",
+      "evidence": [
+        "SYNTHETIC_invoices_2026-06.csv:28"
+      ]
+    }
+  ],
+  "exception_deals": [
+    "BD-2606-03",
+    "BD-2606-07",
+    "BD-2606-08",
+    "BD-2606-09",
+    "BD-2606-11",
+    "BD-2606-14",
+    "BD-2606-26",
+    "BD-2606-77"
+  ],
+  "by_category": {
+    "DATE_SLIP": 2,
+    "AMOUNT_MISMATCH": 2,
+    "MISSING_INVOICE": 1,
+    "DUPLICATE_PAYOUT": 1,
+    "PAYOUT_SPLIT_MISMATCH": 1,
+    "MISSING_IN_CRM": 1
+  },
+  "conservation": {
+    "crm_total_cents": 151550000,
+    "cleared_total_cents": 114600000,
+    "exception_crm_total_cents": 36950000,
+    "ok": true
+  },
+  "auto_clear_rate_pct": 71.4,
+  "n_deals_seen": 28
+}

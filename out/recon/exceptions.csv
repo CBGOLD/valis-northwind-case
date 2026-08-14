@@ -1,0 +1,9 @@
+deal_id,category,detail,evidence
+BD-2606-03,DATE_SLIP,close 2026-06-22 vs invoice 2026-07-03 — revenue period ambiguous,SYNTHETIC_crm_deals_2026-06.csv:4;SYNTHETIC_invoices_2026-06.csv:4
+BD-2606-07,DATE_SLIP,close 2026-06-11 vs invoice 2026-07-02 — revenue period ambiguous,SYNTHETIC_crm_deals_2026-06.csv:8;SYNTHETIC_invoices_2026-06.csv:8
+BD-2606-08,AMOUNT_MISMATCH,"CRM $43,500 vs invoiced $42,195 (delta -$1,305)",SYNTHETIC_crm_deals_2026-06.csv:9;SYNTHETIC_invoices_2026-06.csv:9
+BD-2606-09,MISSING_INVOICE,"deal closed in CRM at $72,750 on 2026-06-17, no invoice raised",SYNTHETIC_crm_deals_2026-06.csv:10
+BD-2606-11,AMOUNT_MISMATCH,"CRM $65,250 vs invoiced $63,292 (delta -$1,958)",SYNTHETIC_crm_deals_2026-06.csv:12;SYNTHETIC_invoices_2026-06.csv:11
+BD-2606-14,DUPLICATE_PAYOUT,1 payout row(s) entered more than once (PAY-918),SYNTHETIC_payouts_2026-06.csv:19;SYNTHETIC_payouts_2026-06.csv:20
+BD-2606-26,PAYOUT_SPLIT_MISMATCH,"paid $20,374.50 vs expected $21,187.50 (75% of $28,250; delta -$813)",SYNTHETIC_crm_deals_2026-06.csv:27;SYNTHETIC_payouts_2026-06.csv:38;SYNTHETIC_payouts_2026-06.csv:39
+BD-2606-77,MISSING_IN_CRM,"invoice(s) totaling $24,500 have no CRM deal behind them",SYNTHETIC_invoices_2026-06.csv:28
