@@ -12,7 +12,7 @@ I have the full picture. Every number below was computed with actual commands ag
 
 # NORTHWIND GROUND TRUTH — independent audit
 
-Sources inspected: all 11 substantive files under `/Users/cb/workspace/valis-northwind-case/input/Northwind-in-a-box_charles/`. I did not read `BUILD_LOG.md` or any builder output, to keep this independent. Line numbers are literal file lines.
+Sources inspected: all 11 substantive files under `$HOME/workspace/valis-northwind-case/input/Northwind-in-a-box_charles/`. I did not read `BUILD_LOG.md` or any builder output, to keep this independent. Line numbers are literal file lines.
 
 ---
 

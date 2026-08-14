@@ -1,10 +1,16 @@
 """Assemble the CEO answers: answer-first, max three load-bearing points,
 explicit confidence and reversal conditions. Numbers are computed live from
-the raw CSVs; citations come from the verified evidence store."""
+the raw CSVs; citations come from the verified evidence store.
+
+Fresh-input rule: bundle testimony, vendor contract context, and bundle
+citations describe the default bundle only. Any non-default --pnl file gets
+computed content exclusively, behind a loud banner (see _q1_fresh)."""
+from pathlib import Path
+
 from .evidence import load_store
-from .finance import saas_breakdown, usd
+from .finance import SAAS_CATEGORY, saas_breakdown, usd
 from .hiring import resolve
-from .paths import BUNDLE_AS_OF
+from .paths import BUNDLE_AS_OF, PNL
 from .tickets import ticket_stats
 
 # Reported (not measured) baseline for the recon: ~3 days/month, cited in
@@ -17,9 +23,150 @@ def _as_of(store):
     return store.get("as_of", BUNDLE_AS_OF)
 
 
+def _is_default_pnl(pnl_path):
+    """True when the P&L in play is the bundle's own file (or unspecified)."""
+    if pnl_path is None:
+        return True
+    try:
+        return Path(pnl_path).resolve() == PNL.resolve()
+    except OSError:
+        return False
+
+
+def _fresh_banner(path):
+    return [
+        f"FRESH-INPUT MODE — computed from: {path}",
+        "Every number below is recomputed from this file alone; detection logic "
+        "is generic (no vendor names hardcoded).",
+        "Bundle-derived testimony, vendor contract context, and bundle citations "
+        "are suppressed: they describe the Northwind bundle, not this file. "
+        "No human corroboration exists for these rows.",
+    ]
+
+
+def _q1_fresh(s):
+    """q1 on a non-default P&L: computed content only. No bundle testimony,
+    no bundle citations, no bundle contract context — those describe
+    input/Northwind-in-a-box_charles/pnl_q1_2026.csv, not this file. A
+    vendor present in both (e.g. Salesforce) is reported as its computed
+    row only."""
+    booked, adjusted = s["booked_cents"], s["adjusted_cents"]
+    dup = s["suspected_duplicate_cents"]
+    has_dup = dup > 0
+    headline = (
+        f"Best estimate {usd(adjusted)} for this file's '{SAAS_CATEGORY}' spend — booked "
+        f"{usd(booked)}, including {usd(dup)} of suspected duplicate entry flagged by "
+        f"generic same-amount/same-notes/vendor-containment detection."
+        if has_dup else
+        f"{usd(booked)} booked to '{SAAS_CATEGORY}' in this file ({s['n_items']} line items; "
+        f"no duplicate suspects detected)."
+    )
+    if s["ties_out"]:
+        tie = ", which ties exactly to the file's stated subtotal"
+    elif s["stated_subtotal_cents"] is not None:
+        tie = " — WARNING: the file's stated subtotal does NOT tie to the row sum"
+    else:
+        tie = "; the file carries no subtotal row to tie against"
+    points = [
+        {
+            "text": (
+                f"Booked: {usd(booked)} across {s['n_items']} line items{tie}. "
+                f"(A naive category sum that keeps the subtotal row would return "
+                f"{usd(s['naive_category_sum_cents'])}; this code excludes it.)"
+            ),
+            "claims": [],
+        },
+        {
+            "text": (
+                "Suspected duplicate(s): "
+                + "; ".join(
+                    f"'{p['drop']['vendor']}' (row {p['drop']['line']}) vs "
+                    f"'{p['keep']['vendor']}' (row {p['keep']['line']}) at "
+                    f"{usd(p['drop']['amount_cents'])} each — {p['reason']}"
+                    for p in s["duplicate_pairs"]
+                )
+                + ". Heuristic only: verify against invoices before restating anything."
+            ),
+            "claims": [],
+        } if has_dup else {
+            "text": "No same-amount/same-notes vendor-containment duplicates detected in this P&L.",
+            "claims": [],
+        },
+    ]
+    sf_rows = [i for i in s["items"] if "salesforce" in i["vendor"].lower()]
+    if sf_rows:
+        points.append({
+            "text": (
+                "Salesforce appears in this file: "
+                + "; ".join(f"'{i['vendor']}' {usd(i['amount_cents'])} (row {i['line']})"
+                            for i in sf_rows)
+                + ". Computed row(s) only — bundle contract context does not apply "
+                  "to this file and is suppressed."
+            ),
+            "claims": [],
+        })
+    reversal = (
+        [
+            f"If invoices show the flagged pair(s) are distinct products or contracts, "
+            f"the answer reverts to {usd(booked)}.",
+            f"If any flagged pair is confirmed a double-posting, the defensible figure "
+            f"is {usd(adjusted)}.",
+        ]
+        if has_dup else
+        [f"If an invoice audit surfaces a duplicate this heuristic missed, "
+         f"{usd(booked)} adjusts down accordingly."]
+    )
+    return {
+        "id": "q1",
+        "question": "What did we actually spend on SaaS tools last quarter?",
+        "fresh_input": {"path": s["path"], "banner": _fresh_banner(s["path"])},
+        "headline": headline,
+        "points": points,
+        "footnotes": [
+            {
+                "text": (
+                    f"Scope: rows whose Category is '{SAAS_CATEGORY}' in the provided file; "
+                    "other categories are not analyzed. "
+                    + (f"Rows flagged unparseable: {'; '.join(s['flags'])}."
+                       if s["flags"] else "No unparseable amounts.")
+                ),
+                "claims": [],
+            },
+        ],
+        "confidence": {
+            "booked": (
+                "Recomputed from the provided file"
+                + (", ties to its stated subtotal." if s["ties_out"]
+                   else "; no clean subtotal tie — treat with caution.")
+            ),
+            "best_estimate": (
+                (
+                    f"Heuristic-only duplicate detection; no testimony or invoices exist "
+                    f"for this file. Bounded: {usd(adjusted)} (duplicates confirmed) to "
+                    f"{usd(booked)} (duplicates refuted)."
+                ) if has_dup else "Equal to booked — no duplicate suspects to adjust for."
+            ),
+        },
+        "reversal": reversal,
+        "as_of": None,
+        "computed": {
+            "booked_cents": booked,
+            "adjusted_cents": adjusted,
+            "naive_category_sum_cents": s["naive_category_sum_cents"],
+            "suspected_duplicate_cents": dup,
+            "n_items": s["n_items"],
+            "ties_out": s["ties_out"],
+            "flags": s["flags"],
+            "pnl_path": s["path"],
+        },
+    }
+
+
 def q1(pnl_path=None, store=None):
     store = store or load_store()
     s = saas_breakdown(pnl_path)
+    if not _is_default_pnl(pnl_path):
+        return _q1_fresh(s)
     booked, adjusted = s["booked_cents"], s["adjusted_cents"]
     dup = s["suspected_duplicate_cents"]
     has_dup = dup > 0
@@ -152,13 +299,14 @@ def q2(store=None):
             "events": ["h4_leadership_sync_minuted", "h2_roster_snapshot"],
         },
         {
+            # Citations here are the revisit-condition evidence only; the open
+            # follow-ups cite themselves in the footnote below.
             "text": (
                 f"Revisit condition: {ev['revisit']}. Still true at the last message in the bundle "
                 f"({r['as_of']}); loose ends below."
             ),
             "claims": [],
             "events": ["h6_freeze_still_in_force"],
-            "followups": True,
         },
     ]
     return {
@@ -276,17 +424,56 @@ def workflow(tickets_path=None, store=None):
     }
 
 
+def _value_fresh(s):
+    """value on a non-default P&L: arithmetic only, bundle claims suppressed."""
+    dup = s["suspected_duplicate_cents"]
+    has_dup = dup > 0
+    share = f"{dup / s['booked_cents'] * 100:.1f}%" if has_dup and s["booked_cents"] else None
+    return {
+        "id": "value",
+        "fresh_input": {"path": s["path"], "banner": _fresh_banner(s["path"])},
+        "headline": (
+            f"{usd(dup)} of this file's booked {usd(s['booked_cents'])} ({share}) is flagged as "
+            f"a suspected duplicate by generic detection — verify against invoices before "
+            f"treating it as either an overstatement or consolidatable spend."
+            if has_dup else
+            f"No duplicate suspects detected in this file (booked {usd(s['booked_cents'])}); "
+            f"no value number is claimed."
+        ),
+        "framing": (
+            "Heuristic finding on a fresh file: no testimony, invoices, or bundle context "
+            "exist for these rows, so no probability or recurrence claim is made."
+        ),
+        "baseline": f"Booked subtotal {usd(s['booked_cents'])} (recomputed from {s['path']}).",
+        "arithmetic": [
+            f"Booked {usd(s['booked_cents'])} − suspected duplicate {usd(dup)} "
+            f"= {usd(s['adjusted_cents'])}."
+        ] + ([f"Share of booked: {share}."] if share else []),
+        "claims": [],
+        "unverified": [
+            "Everything beyond the arithmetic: this file carries no invoices, no testimony, "
+            "and no bundle context. The duplicate flag is a same-amount/same-notes/"
+            "vendor-containment heuristic, not a confirmed finding.",
+        ],
+        "confidence": "Arithmetic only. No corroboration exists for this file.",
+        "as_of": None,
+    }
+
+
 def value(pnl_path=None, store=None):
     """The one CFO-grade number, as structured data (worksheet in docs/)."""
     store = store or load_store()
     s = saas_breakdown(pnl_path)
+    if not _is_default_pnl(pnl_path):
+        return _value_fresh(s)
     dup = s["suspected_duplicate_cents"]
     return {
         "id": "value",
         "headline": (
-            f"{usd(dup)} of the Q1 SaaS line ({dup / s['booked_cents'] * 100:.1f}% of it) is a "
-            f"suspected double-entry — {usd(dup * 4)}/year of at-risk spend if it recurs — and one "
-            f"invoice pull, already owed to the CFO since 2026-06-02, settles it."
+            f"The Q1 SaaS line is {dup / s['booked_cents'] * 100:.1f}% wrong in one of two ways — "
+            f"90%-suspected: a {usd(dup)} double-posting to restate (an accounting fix; cash "
+            f"recovery $0), or 10%-possible: {usd(dup * 4)}/yr of duplicate tooling to "
+            f"consolidate. One invoice pull, already owed to the CFO since 2026-06-02, decides which."
         ),
         "framing": (
             "Framed as exposure with a named resolution test, NOT as a booked saving. If the "

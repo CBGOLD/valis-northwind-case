@@ -30,6 +30,15 @@ def _fmt_cit(c):
     return f"{c['file']}:{c['line']}  “{c['quote']}”"
 
 
+def fresh_banner_block(fresh):
+    """The loud fresh-input banner, shared by every text surface."""
+    lines = ["!" * 78]
+    for b in fresh["banner"]:
+        lines.append(f"!! {b}")
+    lines.append("!" * 78)
+    return lines
+
+
 def _badge_class(v):
     u = v.strip().upper()
     if u.startswith("HIGH"):
@@ -42,6 +51,9 @@ def _badge_class(v):
 def terminal(answer, store=None, show_sources=True):
     store = store or load_store()
     lines = []
+    fresh = answer.get("fresh_input")
+    if fresh:
+        lines.extend(fresh_banner_block(fresh))
     lines.append("=" * 78)
     lines.append(f"Q: {answer['question']}" if "question" in answer else answer["headline"])
     lines.append("=" * 78)
@@ -65,12 +77,21 @@ def terminal(answer, store=None, show_sources=True):
     lines.append("WHAT WOULD CHANGE THIS ANSWER:")
     for rv in answer.get("reversal", []):
         lines.append(f"  - {rv}")
-    lines.append(f"As of {answer['as_of']} (bundle export date). Run `python3 ask.py check` to re-verify every citation.")
+    if fresh:
+        lines.append(f"Computed from {fresh['path']}. Bundle citations and the bundle "
+                     f"knowledge horizon do not apply to this file.")
+    else:
+        lines.append(f"As of {answer['as_of']} (bundle export date). Run `python3 ask.py check` to re-verify every citation.")
     return "\n".join(lines)
 
 
 def _md_answer(answer, store):
-    md = [f"## {answer['question']}", "", f"**{answer['headline']}**", ""]
+    md = [f"## {answer['question']}", ""]
+    if answer.get("fresh_input"):
+        for b in answer["fresh_input"]["banner"]:
+            md.append(f"> **{b}**")
+        md.append("")
+    md += [f"**{answer['headline']}**", ""]
     for i, p in enumerate(answer.get("points", []), 1):
         md.append(f"{i}. {p['text']}")
         cits = _citations_for(store, p)
@@ -87,13 +108,17 @@ def _md_answer(answer, store):
     return "\n".join(md)
 
 
+def _bundle_as_of(answers):
+    return next((a["as_of"] for a in answers if a.get("as_of")), "n/a")
+
+
 def ceo_markdown(answers, store=None):
     store = store or load_store()
     md = [
         "# Northwind — straight answers, with receipts",
         "",
         f"*Everything below traces to an exact file and line in the bundle; knowledge stops at "
-        f"{answers[0]['as_of']} (the Slack export date). Full quote-level audit: `AUDIT.md`. "
+        f"{_bundle_as_of(answers)} (the Slack export date). Full quote-level audit: `AUDIT.md`. "
         f"Re-verify any time: `python3 ask.py check`.*",
         "",
     ]
@@ -118,6 +143,7 @@ ol{margin:0 0 8px;padding-left:20px}li{margin:0 0 10px}
 .hi{background:#e2f0e9;color:var(--acc)}.med{background:#f7ead8;color:var(--warn)}.lo{background:#f6e0e0;color:var(--bad)}
 .meta{font-size:13.5px;color:var(--sub);margin-top:10px}
 .fnote{font-size:13.5px;color:var(--sub);font-style:italic}
+.fresh{background:#f6e0e0;color:var(--bad);font-weight:650;border-radius:8px;padding:10px 12px;font-size:13.5px}
 @media(max-width:520px){body{padding:12px}.card{padding:16px}}
 """
 
@@ -132,12 +158,14 @@ def ceo_html(answers, store=None):
         f"<style>{_CSS}</style></head><body><main>",
         "<h1>Northwind — straight answers, with receipts</h1>",
         f"<p class='sub'>Every claim cites an exact file:line in the bundle · knowledge as of "
-        f"{e(answers[0]['as_of'])} (Slack export date) · audit trail in AUDIT.md · "
+        f"{e(_bundle_as_of(answers))} (Slack export date) · audit trail in AUDIT.md · "
         f"re-verify with <code>python3 ask.py check</code></p>",
     ]
     for a in answers:
         parts.append("<section class='card'>")
         parts.append(f"<p class='q'>{e(a['question'])}</p>")
+        if a.get("fresh_input"):
+            parts.append("<p class='fresh'>" + " ".join(e(b) for b in a["fresh_input"]["banner"]) + "</p>")
         parts.append(f"<p class='headline'>{e(a['headline'])}</p><ol>")
         for p in a.get("points", []):
             parts.append(f"<li>{e(p['text'])}")

@@ -205,7 +205,7 @@
       "kind": "advocacy",
       "position": "HIRE",
       "actor": "Tomás Reyes (VP Sales)",
-      "summary": "Tomas argues for AE capacity; REQ-114 approved, wants an AE seated by mid-July. Marcus pushes back; Dana parks the debate.",
+      "summary": "Tomás argues for AE capacity; REQ-114 approved, wants an AE seated by mid-July. Marcus pushes back; Dana parks the debate.",
       "citations": [
         {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 17, "quote": "REQ-114 approved and I want to get an AE seated by mid-July"},
         {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 20, "quote": "see how Q2 pipeline looks before we add bodies"}
@@ -233,7 +233,7 @@
       "enforcement": "Priya Raman (CFO)",
       "scope": "Sales only; net-new reqs; REQ-114 paused, not killed; other teams unaffected",
       "revisit": "when Q2 pipeline shows recovery",
-      "summary": "Dana announces in #leadership: freezing all new Sales headcount until pipeline recovers, REQ-114 included; Priya holds the line on reqs. Priya confirms REQ-114 is paused, not killed. Tomas records his objection.",
+      "summary": "Dana announces in #leadership: freezing all new Sales headcount until pipeline recovers, REQ-114 included; Priya holds the line on reqs. Priya confirms REQ-114 is paused, not killed. Tomás records his objection.",
       "citations": [
         {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 67, "quote": "FREEZING all new Sales headcount until pipeline recovers"},
         {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 70, "quote": "REQ-114 is paused, not killed"},
@@ -288,7 +288,7 @@
   "hiring_open_followups": [
     {
       "id": "f1_late_stage_candidate",
-      "summary": "A candidate was in late-stage interviews for REQ-114 when the freeze landed. Priya + Tomas were to decide pause-vs-finish-loop by 2026-06-13. No resolution appears anywhere in the corpus through 2026-06-17.",
+      "summary": "A candidate was in late-stage interviews for REQ-114 when the freeze landed. Priya + Tomás were to decide pause-vs-finish-loop by 2026-06-13. No resolution appears anywhere in the corpus through 2026-06-17.",
       "risk": "A live candidate may still be interviewing for a frozen role.",
       "citations": [
         {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 20, "quote": "candidate already in late-stage interviews for REQ-114"},

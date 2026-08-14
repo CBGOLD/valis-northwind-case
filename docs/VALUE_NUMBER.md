@@ -1,10 +1,13 @@
 # The one CFO-grade value number — worksheet
 
-> **$7,500 of the Q1 SaaS line (9.3% of it) is a suspected double-entry — $30,000/year of at-risk
-> spend if it recurs — and one invoice pull, owed to the CFO since 2026-06-02, settles it.**
+> **The Q1 SaaS line is 9.3% wrong in one of two ways. 90%-suspected: a $7,500 double-posting to
+> restate — an accounting fix, cash recovery $0. 10%-possible: $30,000/yr of duplicate tooling to
+> consolidate. One invoice pull, owed to the CFO since 2026-06-02, decides which.**
 
-Framed as **exposure with a named resolution test**, not as a booked saving. Run
-`python3 ask.py value` for the live version (numbers recomputed from the P&L at runtime).
+The two branches are financially unlike — the likely one returns no cash, only a correct published
+number — so the headline carries both, with their probabilities. Framed as **exposure with a named
+resolution test**, not as a booked saving. Run `python3 ask.py value` for the live version (numbers
+recomputed from the P&L at runtime).
 
 ## Baseline
 
@@ -41,14 +44,15 @@ Annualized IF the entry recurs quarterly         =   $7,500 × 4 = $30,000/yr   
 2. **Recurrence beyond Q1** — one quarter of P&L exists; $30,000/yr assumes the entry repeats.
 3. **Cash character** — if it is one invoice posted twice, cash recovery is $0 and the finding is a
    9.3% overstatement of a published number. **No cash-recovery claim is made.**
-4. **Two-distinct-products possibility** — Amplitude does sell separate SKUs (~10% likelihood by the
-   analyst's own estimate); identical pricing and identical notes make it unlikely; only the invoice decides.
+4. **Two-distinct-products possibility** — the analyst's own estimate leaves ~10% for it. Nothing in
+   the bundle confirms or denies that two distinct products exist behind the two names; identical
+   pricing and identical notes make it unlikely; only the invoice decides.
 
 ## How a finance person will attack it — answered in advance
 
 | Attack | Answer |
 |---|---|
-| "Did you pull the invoice?" | No — it isn't in the bundle, and inventing it is disqualifying. That absence *is* the finding: a $30k/yr question has sat unresolved for 15+ days on a 15-minute check. |
+| "Did you pull the invoice?" | No — it isn't in the bundle, and inventing it is disqualifying. That absence *is* the finding: a $30k/yr question has sat unresolved for 15+ days waiting on a single invoice pull. |
 | "It might be two real contracts." | Then it's $30,000/yr of duplicate tooling to consolidate and two rows to rename. Both branches of the test are actionable; neither leaves the books as they are. |
 | "This is only $7,500." | It's 9.3% of the line the CEO asked about, at a company the board just pushed on cost discipline (`slack_export.md:42`). And it is the only number in the bundle wrong by a *knowable* amount. |
 | "Your bigger candidates?" | Considered and rejected below — they die faster under this table's logic. |

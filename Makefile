@@ -31,5 +31,6 @@ fresh:           ## prove the recon engine is not fitted to the committed fixtur
 	  --payouts /tmp/northwind-fresh/SYNTHETIC_payouts_2026-06.csv \
 	  --outdir /tmp/northwind-fresh/out
 
-clean:           ## remove generated artifacts (build recreates them byte-identically)
-	rm -rf out fixtures
+clean:           ## remove generated artifacts (build recreates them byte-identically); keeps authored files like fixtures/README.md
+	rm -rf out
+	rm -f fixtures/SYNTHETIC_*.csv fixtures/fixture_manifest.json

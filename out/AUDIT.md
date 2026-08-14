@@ -202,7 +202,7 @@ Dana announced the freeze in #leadership at 08:47 on 2026-06-10; the meeting not
 ## Hiring timeline events
 
 ### `hiring event — h1_req114_advocacy`
-Tomas argues for AE capacity; REQ-114 approved, wants an AE seated by mid-July. Marcus pushes back; Dana parks the debate.
+Tomás argues for AE capacity; REQ-114 approved, wants an AE seated by mid-July. Marcus pushes back; Dana parks the debate.
 
 - VERIFIED · `input/Northwind-in-a-box_charles/slack_export.md:17` — “REQ-114 approved and I want to get an AE seated by mid-July”
 - VERIFIED · `input/Northwind-in-a-box_charles/slack_export.md:20` — “see how Q2 pipeline looks before we add bodies”
@@ -214,7 +214,7 @@ Board roster snapshot locked with REQ-114 = APPROVED, target start 2026-07-15. T
 - VERIFIED · `input/Northwind-in-a-box_charles/slack_export.md:222` — “a Sales AE (REQ-114, approved, target start mid-July)”
 
 ### `hiring event — h3_ceo_freeze_announcement`
-Dana announces in #leadership: freezing all new Sales headcount until pipeline recovers, REQ-114 included; Priya holds the line on reqs. Priya confirms REQ-114 is paused, not killed. Tomas records his objection.
+Dana announces in #leadership: freezing all new Sales headcount until pipeline recovers, REQ-114 included; Priya holds the line on reqs. Priya confirms REQ-114 is paused, not killed. Tomás records his objection.
 
 - VERIFIED · `input/Northwind-in-a-box_charles/slack_export.md:67` — “FREEZING all new Sales headcount until pipeline recovers”
 - VERIFIED · `input/Northwind-in-a-box_charles/slack_export.md:70` — “REQ-114 is paused, not killed”
@@ -244,7 +244,7 @@ Latest evidence in the corpus: Q3 planning instruction confirms Sales remains on
 ## Open follow-ups
 
 ### `open follow-up — f1_late_stage_candidate`
-A candidate was in late-stage interviews for REQ-114 when the freeze landed. Priya + Tomas were to decide pause-vs-finish-loop by 2026-06-13. No resolution appears anywhere in the corpus through 2026-06-17.
+A candidate was in late-stage interviews for REQ-114 when the freeze landed. Priya + Tomás were to decide pause-vs-finish-loop by 2026-06-13. No resolution appears anywhere in the corpus through 2026-06-17.
 
 *Risk if ignored: A live candidate may still be interviewing for a frozen role.*
 

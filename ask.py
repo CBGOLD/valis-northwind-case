@@ -64,8 +64,13 @@ def cmd_value(args):
     if args.json:
         print(json.dumps(v, indent=2, ensure_ascii=False))
         return 0
+    fresh = v.get("fresh_input")
+    if fresh:
+        for line in render.fresh_banner_block(fresh):
+            print(line)
     print("=" * 78)
-    print("THE ONE CFO-GRADE VALUE NUMBER")
+    print("VALUE NUMBER — FRESH INPUT (heuristic, uncorroborated)" if fresh
+          else "THE ONE CFO-GRADE VALUE NUMBER")
     print("=" * 78)
     print(f"\n{v['headline']}\n")
     if v.get("framing"):
@@ -74,15 +79,21 @@ def cmd_value(args):
     print("Arithmetic:")
     for a in v["arithmetic"]:
         print(f"  - {a}")
-    print("Exact source rows:")
-    for cid in v["claims"]:
-        for c in store["claims"][cid]["citations"]:
-            print(f"  -> {c['file']}:{c['line']}  “{c['quote']}”")
+    if v["claims"]:
+        print("Exact source rows:")
+        for cid in v["claims"]:
+            for c in store["claims"][cid]["citations"]:
+                print(f"  -> {c['file']}:{c['line']}  “{c['quote']}”")
+    else:
+        print("Exact source rows: none — bundle citations do not apply to this file.")
     print("Explicitly NOT verified:")
     for u in v["unverified"]:
         print(f"  - {u}")
     print(f"Confidence: {v['confidence']}")
-    print(f"Worksheet a finance person can attack: docs/VALUE_NUMBER.md")
+    if fresh:
+        print(f"Computed from {fresh['path']}; run without --pnl for the bundle worksheet.")
+    else:
+        print(f"Worksheet a finance person can attack: docs/VALUE_NUMBER.md")
     return 0
 
 

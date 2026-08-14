@@ -28,3 +28,23 @@ All times CEST. This log records real work only; no timestamps are backfilled.
 - Cross-check that decides the automation pick: the brand-deal reconciliation (~3 days/month ≈ 72 h/quarter, corroborated 6× across #finance, finance review, leadership sync) consumes more time than the entire measured support queue (70.5 h/quarter).
 - Launched the independent Opus ground-truth audit (fresh context, read-only, prompt in `llm_logs/prompts/02_opus_ground_truth.md`) to run in parallel with the build; its verbatim output will be reconciled against my answers before finalization.
 
+## 2026-08-15
+
+### 00:33 — First complete build verified
+- Ran `make clean && make build && make test`: 86/86 citations verified; reconciliation demo processed 28 synthetic fixture deals, auto-cleared 20 and emitted 8 evidence-backed exceptions; conservation tied out; 39/39 tests passed.
+- Committed the build as four reviewable units: evidence-backed CEO answers, reconciliation automation, test suite, and executive/audit documentation.
+
+### 00:38 — Independent gauntlet verdicts
+- Fresh-context Claude Opus 5 critic: **PASS, 87/100**, zero BLOCKER/HIGH defects.
+- Fresh-context Claude Fable 5 critic: **PASS, 86/100**, zero BLOCKER/HIGH defects.
+- Both independently re-ran the artifact and identified the same substantive trust defect: fresh-P&L math recomputed correctly, but bundle-specific testimony/citations could leak into fresh-input prose.
+- Other defects accepted for closure: missing `fixtures/README.md`, over-broad Q2 citation grouping, financially asymmetric value-number headline, unsourced external product claim, invented check duration, and a dropped accent in Tomás.
+
+### 00:46 — Gauntlet defects closed and re-verified
+- Added explicit fresh-input mode: prominent banner, computed-only statements, no bundle testimony/citations/knowledge horizon, dynamic reversal values, and Salesforce output only when present in the supplied file.
+- Added two new regression suites covering stale-context leakage and exact Q2 citation scoping.
+- Added the authored fixture-provenance document and changed `make clean` to preserve it.
+- Reframed the value number into its two financially distinct branches; removed unsourced/invented claims.
+- Claude Fable completed most of the targeted revision before the organization hit its monthly spend limit on resume. The limit message is preserved in `llm_logs/runs/05b-fable-revision-resume.json`; remaining verification was executed locally rather than fabricated.
+- Ran `make clean && make all && git diff --check`: **86/86 citations, 51/51 tests, reconciliation conservation TIES OUT, zero whitespace errors**.
+
