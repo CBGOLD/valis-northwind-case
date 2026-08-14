@@ -1,0 +1,328 @@
+{
+  "as_of": "2026-06-18",
+  "as_of_source": {
+    "file": "input/Northwind-in-a-box_charles/slack_export.md",
+    "line": 3,
+    "quote": "Export generated 2026-06-18"
+  },
+  "claims": {
+    "saas.booked_subtotal": {
+      "statement": "Q1 2026 Software & SaaS spend as booked is $81,000; the 15 line items sum to the stated subtotal exactly, and the CFO confirmed the figure in #finance.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 24, "quote": "Software & SaaS subtotal,81000"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 144, "quote": "subtotal as listed is $81k for the quarter"}
+      ]
+    },
+    "saas.amplitude_duplicate_suspected": {
+      "statement": "Two SaaS lines, 'Amplitude' and 'Amplitude Analytics', each post $7,500 with identical notes. Finance's own analyst is '90% sure' it is one product entered twice, but the invoice was never pulled; the CSV was left as-is. No Amplitude invoice, contract, or vendor statement exists in the bundle, so the duplicate is suspected, not verified.",
+      "confidence": "moderate",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 12, "quote": ",Amplitude,7500,"},
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 13, "quote": "Amplitude Analytics,7500"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 147, "quote": "the same product entered twice"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 150, "quote": "that smells like a double-count"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 153, "quote": "leaving the CSV as-is until I can confirm"}
+      ]
+    },
+    "saas.salesforce_timing": {
+      "statement": "Q1 posts Salesforce at $12,000. The $60k/yr renewal was signed 2026-05-14 (Q2) covering 'through next May', so it does not restate Q1. Run-rate impact is +$3,000/quarter from Q2 2026. The 2026-05-28 finance note's direction is backwards: $12,000/qtr annualizes to $48,000, BELOW the $60k contract, not above it.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 9, "quote": "Salesforce,12000"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 119, "quote": "closed the Salesforce renewal. $60k for the year, locked"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/finance_review_2026-05-28.md", "line": 23, "quote": "the current quarterly P&L figure looks higher than a $60k annual would imply"}
+      ]
+    },
+    "saas.salesforce_check_still_open": {
+      "statement": "The action to reconcile the posted Salesforce figure against the signed contract was due 'next week' from 2026-05-28 and shows no closure anywhere in the corpus through 2026-06-17.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/finance_review_2026-05-28.md", "line": 37, "quote": "Confirm Salesforce posted figure against the signed $60k/yr contract"}
+      ]
+    },
+    "saas.aws_out_of_scope": {
+      "statement": "AWS (~$38,000) sits under Infrastructure, not SaaS, per the CFO's explicit instruction not to fold them together. Including AWS answers a different question and must be labeled.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 144, "quote": "AWS infra (~$38k) sits under Infrastructure, not here"},
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 25, "quote": "AWS,38000"}
+      ]
+    },
+    "saas.cloudflare_fx_unconvertible": {
+      "statement": "Cloudflare is billed at EUR 1,900 in a USD column; the Infrastructure subtotal is blank pending FX normalization, and no FX rate exists anywhere in the bundle. The line cannot be converted with supplied data and no rate is invented.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 26, "quote": "Cloudflare,€1900"},
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 27, "quote": "Subtotal pending FX normalization"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/finance_review_2026-05-28.md", "line": 25, "quote": "normalize to USD at month-end FX"}
+      ]
+    },
+    "pnl.cannot_total": {
+      "statement": "The P&L cannot be totaled as supplied: Office supplies is blank pending AP coding, the Infrastructure subtotal is blank, and the Cloudflare line is non-numeric. Any 'total opex' or margin figure from this file is unsupported.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 35, "quote": "Office supplies,,"},
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 27, "quote": "Infrastructure subtotal,,"}
+      ]
+    },
+    "recon.pain_corroborated": {
+      "statement": "Month-end brand-deal revenue reconciliation takes ~3 analyst-days every month, corroborated across two people, three file types, and three months (April, May, June mentions). It is Finance's self-declared #1 time sink and automation vote.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 97, "quote": "the brand-deal revenue recon is the thing that eats my life every month"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 108, "quote": "took me basically three full days again"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 111, "quote": "the biggest recurring time sink in finance right now"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 114, "quote": "If we automated the three-way match"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 158, "quote": "Same brand-deal recon grind"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/finance_review_2026-05-28.md", "line": 11, "quote": "took ~3 full days this cycle"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 35, "quote": "eating ~3 days of Maya's time every month"}
+      ]
+    },
+    "recon.three_sources_named": {
+      "statement": "The three systems in the reconciliation are named in the sources: the CRM deal export (what Sales says closed), the invoicing sheet (what was billed), and the payout tracker (what creators were paid against deals). Deal amounts, close dates, and payout splits drift between all three. None of the three exports is present in the bundle.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 100, "quote": "the CRM export (what Sales says closed), the invoicing sheet (what we billed), and the payout tracker"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/finance_review_2026-05-28.md", "line": 12, "quote": "Deal amounts, close dates, and payout splits drift between all three"}
+      ]
+    },
+    "recon.self_reported_not_logged": {
+      "statement": "The ~3 days/month figure is self-reported in Slack and meeting notes; no timesheet or work log exists in the bundle to verify it. It is treated as an observed-claim baseline, not a measured one.",
+      "confidence": "moderate",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 108, "quote": "basically three full days"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 35, "quote": "never ties out first pass"}
+      ]
+    },
+    "recon.revenue_at_stake": {
+      "statement": "The reconciliation sits under brand-partnership revenue of $4.2M in Q1 2026 - 80% of total revenue - which is why trustworthy first-pass numbers matter more than the analyst hours.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 2, "quote": "Brand partnerships,4200000"}
+      ]
+    },
+    "tickets.claim_40h_falsified": {
+      "statement": "Ops claimed 'easily 40 hrs/week' of creator support and 'a full-time person's worth, minimum'. The company's own Q1 ticket log measures 140 tickets and 4,230 handle-minutes = 70.5 h/quarter = 5.48 h/week (0.137 FTE). Like-for-like on the three categories Liam named, the claim is 8.1x the measured rate (7.3x against all tickets). Elena asked whether the number was 'measured or a vibe'; Ben predicted felt-volume would exceed measured volume. The log answers: vibe.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 176, "quote": "easily 40 hrs/week on creator support"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 179, "quote": "is that measured or a vibe?"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 185, "quote": "I suspect the felt-volume is higher than the measured volume"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 188, "quote": "it FEELS like a full-time person"}
+      ]
+    },
+    "tickets.liam_right_on_volume": {
+      "statement": "Liam is 8x off on hours but right on volume share: he said self-serve thumbnail replacement would remove 'half my tickets'; thumbnail re-uploads are 63 of 140 tickets = 45.0% by count (but only 32% of minutes).",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 193, "quote": "half my tickets would vanish"}
+      ]
+    },
+    "tickets.q2_rate_unverifiable": {
+      "statement": "'Thumbnail swap request #47 this week' (2026-05-21) cannot be verified: there is no Q2 ticket data in the bundle. Read as a weekly rate it is ~9.6x the measured Q1 rate; read as cumulative since Apr 1 it is consistent with history. Only the cumulative reading is supported by data; the conflict is left open.",
+      "confidence": "low",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 193, "quote": "Thumbnail swap request #47 this week"}
+      ]
+    },
+    "value.blended_rate": {
+      "statement": "The only loaded labor rate derivable from the bundle: $3,120,000 quarterly salaries & benefits x 4 / 300 FTE / 2,080 hrs = $20.00/hr. This is a company-wide blend; a Finance Analyst's true loaded cost is almost certainly higher, but no per-person or per-team compensation data exists in the bundle, so no uplift is invented.",
+      "confidence": "moderate",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 7, "quote": "Salaries & benefits (all teams),3120000"},
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 18, "quote": "TOTAL,300"}
+      ]
+    },
+    "definitions.creator_count_unreconciled": {
+      "statement": "Two irreconciled creator counts circulate: Data's 'active' = 1,210 (posted >=1 in last 30 days) vs Finance/Talent's 1,840 under contract. Finance models per-creator economics on 1,840; the single-definition decision was still open at the 2026-06-11 sync.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/data_review_2026-05-20.md", "line": 14, "quote": "active creators = 1,210"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 130, "quote": "1,840 creators under contract"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/finance_review_2026-05-28.md", "line": 18, "quote": "1,840 creators under contract"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 31, "quote": "pick ONE headline definition"}
+      ]
+    },
+    "integrity.weekday_labels_unreliable": {
+      "statement": "13 of 20 unique dated message headers in the Slack export carry weekday labels that do not match their dates (e.g. 'Fri May 2' is a Saturday; 'Mon Jun 2' is a Tuesday). ISO-style dates are treated as authoritative; weekday labels are ignored. Both dates carrying the hiring decision (Jun 10 = Wed, Jun 11 = Thu) are among the seven correct ones.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 107, "quote": "Fri May 2"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 143, "quote": "Mon Jun 2"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 157, "quote": "Fri Jun 13"}
+      ]
+    },
+    "integrity.roster_defects": {
+      "statement": "The roster snapshot has an impossible start date (2026-13-02), a blank start date, a blank requisition target date, and two labels for one team ('Creator Mgmt' vs 'Creator Management'). Its employee list is a 29-row sample against a stated 300 headcount - team sizes must come from the summary section, never from counting employee rows.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 46, "quote": "2026-13-02"},
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 50, "quote": "Onboarding Specialist,Active,,"},
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 25, "quote": "REQ-125,Data,Analytics Engineer,OPEN,,"},
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 47, "quote": "Creator Mgmt"},
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 49, "quote": "Creator Management"}
+      ]
+    },
+    "integrity.org_chart_manager_conflict": {
+      "statement": "org_chart.md places Ben Okoro (Data) directly under the CEO in the reporting tree, while the roster records his manager as Raj Patel; several VP reporting lines differ the same way (roster says Marcus, chart says Dana). The COO 'cross-functional delivery oversight' note partially explains it, but not for Data or Engineering. Headcounts, by contrast, tie exactly to 300 in both files.",
+      "confidence": "moderate",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/org_chart.md", "line": 51, "quote": "Ben Okoro"},
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 37, "quote": "Ben Okoro,Data,Head of Data,Active,2021-11-02,Raj Patel"}
+      ]
+    },
+    "saas.completeness_gap": {
+      "statement": "The $81,000 is spend booked to the SaaS line, not a complete inventory of software in use: the bundle shows a CMS and a ticketing system in daily operational use with no corresponding SaaS line item, and no HRIS/payroll or accounting-system line appears for a ~300-FTE company. Unquantifiable from this bundle; flagged, not estimated.",
+      "confidence": "moderate",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 165, "quote": "it's all manual through the CMS"},
+        {"file": "input/Northwind-in-a-box_charles/support_tickets_q1_2026.csv", "line": 1, "quote": "Ticket_ID,Date,Category,Submitted_By,Assigned_To,Handle_Minutes,Status"}
+      ]
+    },
+    "tickets.taxform_buy_not_build": {
+      "statement": "Tax-form chasing (W-9/W-8) is the largest support category by minutes, and already has a buy-not-build answer: People says cheap e-sign/tax-form services exist, revisit at Q3 planning.",
+      "confidence": "high",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 201, "quote": "chasing W-8s from the international creators. Manual every time."},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 204, "quote": "There are e-sign + tax form services. Cheap."}
+      ]
+    },
+    "hiring.chronology_note": {
+      "statement": "Dana announced the freeze in #leadership at 08:47 on 2026-06-10; the meeting note is dated 2026-06-11; Elena's 2026-06-11 message says 'yesterday's leadership call'. Substance is identical under either reading; the decision date is reported as 'announced 2026-06-10, minuted 2026-06-11' with moderate confidence on the date-of-record only.",
+      "confidence": "moderate",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 66, "quote": "Wed Jun 10, 8:47 AM"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 3, "quote": "2026-06-11 (Thu)"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 230, "quote": "Following yesterday's leadership call"}
+      ]
+    }
+  },
+  "hiring_events": [
+    {
+      "id": "h1_req114_advocacy",
+      "date": "2026-04-21",
+      "kind": "advocacy",
+      "position": "HIRE",
+      "actor": "Tomás Reyes (VP Sales)",
+      "summary": "Tomas argues for AE capacity; REQ-114 approved, wants an AE seated by mid-July. Marcus pushes back; Dana parks the debate.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 17, "quote": "REQ-114 approved and I want to get an AE seated by mid-July"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 20, "quote": "see how Q2 pipeline looks before we add bodies"}
+      ]
+    },
+    {
+      "id": "h2_roster_snapshot",
+      "date": "2026-05-01",
+      "kind": "record",
+      "position": "HIRE",
+      "actor": "Elena Novak (Head of People)",
+      "summary": "Board roster snapshot locked with REQ-114 = APPROVED, target start 2026-07-15. This record was accurate on its date and is now stale.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 22, "quote": "REQ-114,Sales,Account Executive,APPROVED,2026-07-15"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 222, "quote": "a Sales AE (REQ-114, approved, target start mid-July)"}
+      ]
+    },
+    {
+      "id": "h3_ceo_freeze_announcement",
+      "date": "2026-06-10",
+      "kind": "ceo_decision",
+      "position": "FROZEN",
+      "actor": "Dana Whitfield (CEO)",
+      "owner": "Dana Whitfield (CEO)",
+      "enforcement": "Priya Raman (CFO)",
+      "scope": "Sales only; net-new reqs; REQ-114 paused, not killed; other teams unaffected",
+      "revisit": "when Q2 pipeline shows recovery",
+      "summary": "Dana announces in #leadership: freezing all new Sales headcount until pipeline recovers, REQ-114 included; Priya holds the line on reqs. Priya confirms REQ-114 is paused, not killed. Tomas records his objection.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 67, "quote": "FREEZING all new Sales headcount until pipeline recovers"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 70, "quote": "REQ-114 is paused, not killed"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 73, "quote": "Putting my objection on record"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 79, "quote": "current state is frozen on Sales hiring"}
+      ]
+    },
+    {
+      "id": "h4_leadership_sync_minuted",
+      "date": "2026-06-11",
+      "kind": "meeting_decision",
+      "position": "FROZEN",
+      "actor": "Leadership sync (notes: Marcus Lindqvist)",
+      "owner": "Dana Whitfield (CEO)",
+      "enforcement": "Priya Raman (CFO) - no new Sales req moves forward without her sign-off",
+      "scope": "Net-new Sales reqs only; REQ-114 on hold; backfills for regretted attrition case-by-case (Priya + Tomás); other teams unaffected",
+      "revisit": "Pipeline coverage back to target + two consecutive months of recovered conversion; re-evaluate at July leadership sync",
+      "announced_on": "2026-06-10",
+      "summary": "The freeze is minuted as a DECISION. The note explicitly supersedes the 2026-05-01 roster line showing REQ-114 APPROVED.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 16, "quote": "Freeze all new Sales headcount until pipeline recovers"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 16, "quote": "superseded by this decision"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 17, "quote": "Backfills for regretted attrition to be reviewed case-by-case"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 18, "quote": "no new Sales req moves forward without her sign-off"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 19, "quote": "pipeline coverage back to target + two consecutive months of recovered conversion"}
+      ]
+    },
+    {
+      "id": "h5_people_cascade",
+      "date": "2026-06-11",
+      "kind": "operational",
+      "position": "FROZEN",
+      "actor": "Elena Novak (Head of People)",
+      "summary": "People cascades the freeze: REQ-114 paused per Dana's decision, Priya enforcing; the May 1 roster is declared stale on this point; freeze is Sales-only, other teams' reqs unaffected.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 230, "quote": "REQ-114 is paused per Dana's decision, Priya enforcing on reqs"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 236, "quote": "freeze is Sales-only for now"}
+      ]
+    },
+    {
+      "id": "h6_freeze_still_in_force",
+      "date": "2026-06-15",
+      "kind": "operational",
+      "position": "FROZEN",
+      "actor": "Elena Novak (Head of People)",
+      "summary": "Latest evidence in the corpus: Q3 planning instruction confirms Sales remains on freeze.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 244, "quote": "Sales is on freeze so don't bother submitting Sales reqs until that lifts"}
+      ]
+    }
+  ],
+  "hiring_open_followups": [
+    {
+      "id": "f1_late_stage_candidate",
+      "summary": "A candidate was in late-stage interviews for REQ-114 when the freeze landed. Priya + Tomas were to decide pause-vs-finish-loop by 2026-06-13. No resolution appears anywhere in the corpus through 2026-06-17.",
+      "risk": "A live candidate may still be interviewing for a frozen role.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 20, "quote": "candidate already in late-stage interviews for REQ-114"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 42, "quote": "pause vs finish loop, no offer"}
+      ]
+    },
+    {
+      "id": "f2_greenhouse_unconfirmed",
+      "summary": "Marcus was to notify Elena so recruiting pauses the req in Greenhouse (due 2026-06-12). Elena's Slack instruction is not an ATS state change; no confirmation exists that Greenhouse - a live, paid system - shows the req paused.",
+      "risk": "The ATS may still show REQ-114 as approved and actively recruitable.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 43, "quote": "Notify Elena/People to pause Sales req in Greenhouse"},
+        {"file": "input/Northwind-in-a-box_charles/pnl_q1_2026.csv", "line": 22, "quote": "Greenhouse,4000"}
+      ]
+    },
+    {
+      "id": "f3_roster_never_restated",
+      "summary": "The board-facing roster snapshot still reads APPROVED for REQ-114; it was never restated after the freeze. Anyone querying the official snapshot gets the superseded answer.",
+      "risk": "The system of record contradicts the standing decision.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 22, "quote": "APPROVED"},
+        {"file": "input/Northwind-in-a-box_charles/meeting_notes/leadership_sync_2026-06-11.md", "line": 16, "quote": "superseded by this decision"}
+      ]
+    },
+    {
+      "id": "f4_req_list_mismatch",
+      "summary": "Elena's 'official picture for the board' names three open reqs (Sales AE, Creator Mgmt backfill, an Eng role); the CSV she prepared lists four (Sales, Eng, Content, Data) and the Creator Mgmt backfill appears in no req row at all, yet it is real and proceeding.",
+      "risk": "The req tracker and the board summary disagree in both directions.",
+      "citations": [
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 222, "quote": "plus a Creator Management backfill and an Eng role"},
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 24, "quote": "REQ-121,Content/Production"},
+        {"file": "input/Northwind-in-a-box_charles/headcount_roster.csv", "line": 25, "quote": "REQ-125,Data"},
+        {"file": "input/Northwind-in-a-box_charles/slack_export.md", "line": 239, "quote": "proceeding with the backfill"}
+      ]
+    }
+  ]
+}
