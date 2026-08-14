@@ -1,0 +1,13 @@
+{
+  "run": "02-opus-ground-truth",
+  "model": "claude-opus-5",
+  "role": "independent adversarial ground truth (CFO / data auditor / case evaluator)",
+  "mode": "fresh context subagent, read-only, launched before any builder output existed; did not read BUILD_LOG.md or builder files",
+  "prompt": "llm_logs/prompts/02_opus_ground_truth.md (verbatim, plus a read-only guard preamble)",
+  "launched_cest": "2026-08-14 ~23:50",
+  "duration_seconds": 577,
+  "tool_uses": 22,
+  "output_tokens_approx": 104000,
+  "verbatim_output": "llm_logs/runs/02-opus-ground-truth.md",
+  "reconciliation": "Agreements: 81k/73.5k bounded answer; Salesforce unadjusted + note's directional error; FROZEN with three-role ownership; 4,230 ticket minutes; Amplitude-as-exposure framing. Adopted from Opus: naive-sum trap made explicit+tested; completeness-gap footnote; 2025-weekday anomaly (independently re-verified); decided-in-humans vs unconfirmed-in-systems framing. Divergence handled: Opus ranked a P&L close-integrity linter #1 because the recon exports are absent; this submission ships the close-integrity checks inside the ask slice (running on real rows, tested) AND ships the recon engine on a loudly-labeled synthetic fixture with the real data contract in the builder spec - the workflow ANSWER stays with the evidence (recon first), the demo stays honest."
+}

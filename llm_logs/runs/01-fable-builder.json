@@ -1,0 +1,25 @@
+{
+  "run": "01-fable-builder",
+  "model": "claude-fable-5",
+  "role": "builder (main loop)",
+  "harness": "Claude Code (Claude Agent SDK), non-interactive session",
+  "prompt": "llm_logs/prompts/01_fable_builder.md",
+  "session_window_cest": "2026-08-14 23:43 -> 2026-08-15 ~00:00 (interrupted; resumed as run 01b)",
+  "note": "Structured run record written at build time; the harness does not expose raw API transcripts. Phases and judgments are logged with real timestamps in BUILD_LOG.md.",
+  "phases": [
+    "Read the full bundle (all 11 substantive input files) and the assignment.",
+    "Verified ground truth by computation before building: 15 SaaS items sum to 81,000 = stated subtotal; adjusted 73,500; tickets 140/4,230 min = 5.48 h/wk = 13.7% of the 40 h/wk claim.",
+    "Launched the independent Opus ground-truth audit (run 02) fresh-context and read-only, in parallel with the build.",
+    "Built src/: evidence store + citation verifier, finance (incl. generic duplicate heuristic + naive-sum trap), tickets, hiring supersession resolver, renderers; ask.py CLI.",
+    "Built the recon automation: seeded synthetic fixture generator (labeled, June 2026, answer-key manifest) + three-way match engine with row-level evidence and conservation check; recon.py CLI; first run: 28 deals, 20 cleared, 8 exceptions across all 6 categories, conservation ties.",
+    "Verified the Slack weekday anomaly independently (13/20 unique dates match the 2025 calendar).",
+    "Reconciled the Opus audit against the build; adopted: naive-sum trap surfaced+tested, completeness-gap footnote, honest split for the recon demo (engine real, inputs labeled synthetic, spec carries the real contract)."
+  ],
+  "subagents": [
+    {
+      "run": "02-opus-ground-truth",
+      "model": "claude-opus-5",
+      "mode": "read-only, fresh context, background"
+    }
+  ]
+}

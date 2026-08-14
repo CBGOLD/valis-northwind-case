@@ -1,0 +1,15 @@
+{
+  "run": "01b-fable-resume",
+  "model": "claude-fable-5",
+  "role": "builder (main loop, resumed session)",
+  "harness": "Claude Code (Claude Agent SDK), non-interactive session",
+  "prompt": "continuation instruction: finish every requirement, full clean build + tests, logical commits, logs, clean tree",
+  "session_window_cest": "2026-08-15 00:06 -> (see BUILD_LOG.md for close)",
+  "note": "Mid-build, the evidence store and answers module were restructured outside this session (richer per-claim confidence, additional findings: org-chart/roster manager conflict, req-list mismatch, creator-count definitional split, revenue-at-stake, blended rate, chronology note). This run kept that version, re-added two dropped claims (saas.completeness_gap, tickets.taxform_buy_not_build), and wired code to the new schema.",
+  "phases": [
+    "Rewired renderers and CLI to the restructured store; 86 citations verify.",
+    "Wrote the 39-test suite (citation integrity incl. tamper detection, finance traps, hiring supersession, ticket arithmetic, recon answer-key scoring at 100% recall/precision incl. fresh seeds, e2e determinism + fresh-input).",
+    "Authored docs: DECISIONS.md (21 judgment calls), VALUE_NUMBER.md (attack-surface worksheet), BUILDER_SPEC.md (data contract + acceptance test), fixtures/README.md, README.md.",
+    "Saved LLM run records; adversarial critic pass on the real repo; final clean-state build + tests; logical commits."
+  ]
+}
