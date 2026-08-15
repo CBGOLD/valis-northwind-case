@@ -48,3 +48,10 @@ All times CEST. This log records real work only; no timestamps are backfilled.
 - Claude Fable completed most of the targeted revision before the organization hit its monthly spend limit on resume. The limit message is preserved in `llm_logs/runs/05b-fable-revision-resume.json`; remaining verification was executed locally rather than fabricated.
 - Ran `make clean && make all && git diff --check`: **86/86 citations, 51/51 tests, reconciliation conservation TIES OUT, zero whitespace errors**.
 
+### 03:42 — Post-fix audits closed a payout conservation hole
+- Ran two independent fresh-context audits against exact committed HEAD `2d955659bda40fce499a2daaccc74d2ada34d3c8`. Both exercised the repository; their initial runs hit the 20-turn cap and their resumed sessions produced final verdicts.
+- Claude Opus 5: **FAIL, 79/100**. Claude Fable 5: **FAIL, 84/100**. Both identified the stale README test count as a MEDIUM trust defect; Fable also proved a HIGH defect by injecting a payout-only deal ID that disappeared while the engine reported `TIES OUT`.
+- Fixed the bounded defects: payout IDs now participate in the disposition union, payout-only rows emit evidence-backed `ORPHAN_PAYOUT`, reporting names both CRM-dollar conservation and orphan-payout coverage, and the data contract documents the category.
+- Added five orphan-payout regression tests plus a README-count drift guard; updated the README to the discovered suite count.
+- Ran `make clean && make all && git diff --check`: **86/86 citations, 57/57 tests, deterministic generated artifacts, zero whitespace errors**.
+

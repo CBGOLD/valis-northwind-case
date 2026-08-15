@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.recon.engine import reconcile
+from src.recon.engine import reconcile, summary_markdown
 from src.recon.fixture import MONTH, generate
 
 
@@ -109,6 +109,114 @@ class TestEngineAgainstAnswerKey(unittest.TestCase):
         self.assertEqual(result["exceptions"], [])
         self.assertEqual(len(result["cleared"]), 1)
         self.assertEqual(result["auto_clear_rate_pct"], 100.0)
+
+
+class TestOrphanPayoutRegression(unittest.TestCase):
+    """Post-fix regression: src/recon/engine.py used to build all_ids from only
+    CRM and invoice deal_ids, so a payout referencing a deal_id absent from both
+    was silently dropped from every output while conservation still reported
+    TIES OUT. These tests pin the fix: the orphan payout must surface as an
+    ORPHAN_PAYOUT exception with exact row evidence, and the run's own
+    self-reporting (disposition + conservation) must stay truthful about what
+    it does and does not cover."""
+
+    def _books(self, d, extra_payout_row=""):
+        d = Path(d)
+        (d / "crm.csv").write_text(
+            "deal_id,brand,creator_handle,amount_usd,close_date,stage,owner_rep,creator_split_pct\n"
+            "BD-1,BrandX,fx_a,10000,2026-06-05,Closed Won,rep_a,70\n", encoding="utf-8")
+        (d / "inv.csv").write_text(
+            "invoice_id,deal_id,brand,amount_usd,invoice_date,status\n"
+            "INV-1,BD-1,BrandX,10000,2026-06-10,issued\n", encoding="utf-8")
+        (d / "pay.csv").write_text(
+            "payout_id,deal_id,creator_handle,amount_usd,paid_date\n"
+            "PAY-1,BD-1,fx_a,7000,2026-07-01\n"
+            + extra_payout_row, encoding="utf-8")
+        return d / "crm.csv", d / "inv.csv", d / "pay.csv"
+
+    def test_orphan_payout_is_not_silently_dropped(self):
+        """A payout row against a deal_id in no other file must be
+        dispositioned, not vanish — the exact bug Fable's probe found
+        (PAY-2, BD-999, $5,000 against a nonexistent deal)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            crm, inv, pay = self._books(tmp, extra_payout_row="PAY-2,BD-999,fx_z,5000,2026-07-02\n")
+            result = reconcile(crm, inv, pay)
+
+        self.assertIn("BD-999", result["exception_deals"])
+        self.assertIn("BD-999", [c["deal_id"] for c in result["cleared"]] + result["exception_deals"])
+        orphan = [e for e in result["exceptions"] if e["deal_id"] == "BD-999"]
+        self.assertEqual(len(orphan), 1, "BD-999 must produce exactly one exception, not disappear")
+        self.assertEqual(orphan[0]["category"], "ORPHAN_PAYOUT")
+        self.assertNotIn("BD-999", [c["deal_id"] for c in result["cleared"]])
+
+    def test_orphan_payout_evidence_cites_exact_source_row(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            crm, inv, pay = self._books(tmp, extra_payout_row="PAY-2,BD-999,fx_z,5000,2026-07-02\n")
+            result = reconcile(crm, inv, pay)
+            raw_line = Path(pay).read_text(encoding="utf-8").splitlines()[2]  # line 3, 1-indexed
+
+        orphan = next(e for e in result["exceptions"] if e["deal_id"] == "BD-999")
+        self.assertEqual(orphan["evidence"], ["pay.csv:3"])
+        self.assertEqual(raw_line, "PAY-2,BD-999,fx_z,5000,2026-07-02")
+        self.assertIn("$5,000", orphan["detail"])
+
+    def test_disposition_and_conservation_stay_truthful_with_orphan_payout(self):
+        """Total disposition must count the orphan deal_id; the CRM-scoped
+        conservation figure must stay honest about its own scope (it neither
+        breaks nor silently absorbs money that was never in the CRM)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            crm, inv, pay = self._books(tmp, extra_payout_row="PAY-2,BD-999,fx_z,5000,2026-07-02\n")
+            result = reconcile(crm, inv, pay)
+
+        disp = result["disposition"]
+        cons = result["conservation"]
+        self.assertEqual(disp["n_deal_ids_seen"], 2)  # BD-1 and BD-999
+        self.assertTrue(disp["complete"], "every deal_id must be cleared XOR exceptioned")
+        self.assertEqual(disp["n_cleared"] + disp["n_exception_deals"], disp["n_deal_ids_seen"])
+
+        # BD-999 never touches the CRM, so it must not distort the CRM-scoped total.
+        self.assertEqual(cons["crm_total_cents"], 10000_00)
+        self.assertTrue(cons["ok"], "CRM-scoped conservation must still tie for the CRM-side deal")
+        self.assertEqual(cons["orphan_payout_cents"], 5000_00)
+        self.assertIn("CRM-scoped", cons["scope"])
+
+        summary = summary_markdown(result)
+        self.assertIn("ORPHAN_PAYOUT", summary)
+        self.assertIn("$5,000 in orphan payouts", summary)
+        self.assertIn("Total disposition", summary)
+        self.assertIn("COMPLETE", summary)
+
+    def test_no_orphan_payout_keeps_reporting_silent_on_it(self):
+        """Conservation/summary must not claim an orphan-payout figure when
+        there isn't one — the truthful report is silence, not a fabricated
+        zero-value callout line."""
+        with tempfile.TemporaryDirectory() as tmp:
+            crm, inv, pay = self._books(tmp)
+            result = reconcile(crm, inv, pay)
+
+        self.assertEqual(result["conservation"]["orphan_payout_cents"], 0)
+        self.assertNotIn("ORPHAN_PAYOUT", [e["category"] for e in result["exceptions"]])
+        self.assertNotIn("orphan payouts", summary_markdown(result))
+
+    def test_deal_id_with_invoice_and_payout_but_no_crm_flags_both_categories(self):
+        """A deal_id with neither a CRM row but present in both invoices and
+        payouts must not let one category mask the other."""
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "crm.csv").write_text(
+                "deal_id,brand,creator_handle,amount_usd,close_date,stage,owner_rep,creator_split_pct\n",
+                encoding="utf-8")
+            (d / "inv.csv").write_text(
+                "invoice_id,deal_id,brand,amount_usd,invoice_date,status\n"
+                "INV-9,BD-GHOST,BrandZ,2450,2026-06-26,issued\n", encoding="utf-8")
+            (d / "pay.csv").write_text(
+                "payout_id,deal_id,creator_handle,amount_usd,paid_date\n"
+                "PAY-9,BD-GHOST,fx_z,1000,2026-07-05\n", encoding="utf-8")
+            result = reconcile(d / "crm.csv", d / "inv.csv", d / "pay.csv")
+
+        cats = {e["category"] for e in result["exceptions"] if e["deal_id"] == "BD-GHOST"}
+        self.assertEqual(cats, {"MISSING_IN_CRM", "ORPHAN_PAYOUT"})
+        self.assertTrue(result["disposition"]["complete"])
 
 
 if __name__ == "__main__":

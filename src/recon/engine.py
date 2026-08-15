@@ -15,8 +15,17 @@ different total"):
   DATE_SLIP              invoice month != CRM close month (revenue period ambiguous)
   MISSING_INVOICE        deal closed in CRM, no invoice raised
   MISSING_IN_CRM         invoice exists, no CRM deal behind it
+  ORPHAN_PAYOUT          payout exists, no CRM deal behind it (money paid against
+                         a deal_id the CRM export never mentions)
   PAYOUT_SPLIT_MISMATCH  payout total != CRM amount x contracted split
   DUPLICATE_PAYOUT       identical payout row entered more than once
+
+Every deal_id appearing in ANY of the three files — CRM, invoices, or payouts —
+is dispositioned exactly once (cleared or exception); the `disposition` block
+in the result proves this by construction. The `conservation` block is a
+narrower, CRM-scoped check (CRM total = cleared + exception-deals CRM total)
+and does not by itself cover money invoiced or paid against a deal_id absent
+from the CRM — that money surfaces as MISSING_IN_CRM / ORPHAN_PAYOUT instead.
 """
 import csv
 import json
@@ -74,7 +83,7 @@ def reconcile(crm_path, invoices_path, payouts_path):
     for r in payouts:
         pay_by_deal[r["deal_id"]].append(r)
 
-    all_ids = sorted(set(crm_by_id) | set(inv_by_deal))
+    all_ids = sorted(set(crm_by_id) | set(inv_by_deal) | set(pay_by_deal))
     exceptions, cleared = [], []
 
     for deal_id in all_ids:
@@ -84,13 +93,23 @@ def reconcile(crm_path, invoices_path, payouts_path):
         issues = []
 
         if deal is None:
-            refs = [_ref(invoices_path, i) for i in invs]
-            total = sum(_cents(i, invoices_path) for i in invs)
-            exceptions.append({
-                "deal_id": deal_id, "category": "MISSING_IN_CRM",
-                "detail": f"invoice(s) totaling {usd(total)} have no CRM deal behind them",
-                "evidence": refs,
-            })
+            if invs:
+                refs = [_ref(invoices_path, i) for i in invs]
+                total = sum(_cents(i, invoices_path) for i in invs)
+                exceptions.append({
+                    "deal_id": deal_id, "category": "MISSING_IN_CRM",
+                    "detail": f"invoice(s) totaling {usd(total)} have no CRM deal behind them",
+                    "evidence": refs,
+                })
+            if pays:
+                refs = [_ref(payouts_path, p) for p in pays]
+                total = sum(_cents(p, payouts_path) for p in pays)
+                exceptions.append({
+                    "deal_id": deal_id, "category": "ORPHAN_PAYOUT",
+                    "detail": f"payout(s) totaling {usd(total)} paid out against a deal_id "
+                              f"with no CRM deal behind it",
+                    "evidence": refs,
+                })
             continue
 
         crm_amt = _cents(deal, crm_path)
@@ -159,6 +178,24 @@ def reconcile(crm_path, invoices_path, payouts_path):
     crm_total = sum(_cents(r, crm_path) for r in crm)
     cleared_total = sum(parse_money_cents(c["amount_usd"])[0] for c in cleared)
     exc_crm_total = sum(_cents(crm_by_id[d], crm_path) for d in exception_deals if d in crm_by_id)
+    orphan_payout_cents = sum(
+        _cents(p, payouts_path)
+        for deal_id, deal_pays in pay_by_deal.items() if deal_id not in crm_by_id
+        for p in deal_pays
+    )
+
+    # Total disposition (BUILDER_SPEC acceptance test #1): every deal_id seen in
+    # any of the three files ends up cleared XOR exceptioned — never neither.
+    # This is what actually catches a payout-only deal_id; the CRM-scoped
+    # conservation check below cannot see it by construction.
+    disposition = {
+        "n_deal_ids_seen": len(all_ids),
+        "n_cleared": len(cleared),
+        "n_exception_deals": len(exception_deals),
+        "complete": len(cleared) + len(exception_deals) == len(all_ids),
+    }
+    assert disposition["complete"], "internal error: a deal_id was neither cleared nor exceptioned"
+
     return {
         "inputs": {
             "crm": {"path": str(crm_path), "rows": len(crm), "total_cents": crm_total},
@@ -169,11 +206,18 @@ def reconcile(crm_path, invoices_path, payouts_path):
         "exceptions": exceptions,
         "exception_deals": exception_deals,
         "by_category": dict(Counter(e["category"] for e in exceptions)),
+        "disposition": disposition,
         "conservation": {
             "crm_total_cents": crm_total,
             "cleared_total_cents": cleared_total,
             "exception_crm_total_cents": exc_crm_total,
             "ok": crm_total == cleared_total + exc_crm_total,
+            "orphan_payout_cents": orphan_payout_cents,
+            "scope": ("CRM-scoped: CRM closed-won total only — by construction this cannot "
+                      "see money invoiced or paid against a deal_id absent from the CRM "
+                      "export. That money is covered by `disposition` above and surfaced in "
+                      "the MISSING_IN_CRM / ORPHAN_PAYOUT exception totals, never folded "
+                      "into \"ties out\"."),
         },
         "auto_clear_rate_pct": round(100.0 * len(cleared) / len(all_ids), 1) if all_ids else 0.0,
         "n_deals_seen": len(all_ids),
@@ -190,6 +234,7 @@ SUMMARY_BANNER = (
 def summary_markdown(result):
     r = result
     cons = r["conservation"]
+    disp = r["disposition"]
     lines = [
         "# Three-way brand-deal reconciliation — run summary", "",
         SUMMARY_BANNER,
@@ -209,10 +254,28 @@ def summary_markdown(result):
         lines.append(f"  - {cat}: {n}")
     lines += [
         "",
+        "## Total disposition (nothing silently dropped)",
+        f"- **{disp['n_deal_ids_seen']} deal_id(s)** seen across CRM ∪ invoices ∪ payouts — "
+        f"{disp['n_cleared']} cleared + {disp['n_exception_deals']} exceptioned = "
+        f"{disp['n_cleared'] + disp['n_exception_deals']} → "
+        f"{'COMPLETE' if disp['complete'] else '**INCOMPLETE — a deal_id is missing, do not trust this run**'}. "
+        "Includes deal_ids that exist only in the payout tracker (no CRM or invoice record) — those "
+        "surface as ORPHAN_PAYOUT below rather than disappearing.",
+        "",
         "## Conservation check (self-audit)",
         f"- CRM closed-won total {usd(cons['crm_total_cents'])} = cleared {usd(cons['cleared_total_cents'])} "
         f"+ exceptions {usd(cons['exception_crm_total_cents'])} → "
-        f"{'TIES OUT' if cons['ok'] else '**BROKEN — do not trust this run**'}",
+        f"{'TIES OUT' if cons['ok'] else '**BROKEN — do not trust this run**'} "
+        "(this check is CRM-scoped by construction — see Total disposition above for the "
+        "guarantee that covers deal_ids the CRM export never mentions).",
+    ]
+    if cons["orphan_payout_cents"]:
+        lines.append(
+            f"- **{usd(cons['orphan_payout_cents'])} in orphan payouts** — money paid out against a "
+            "deal_id with no CRM record — sits outside the CRM total above by definition; see "
+            "ORPHAN_PAYOUT in the exception queue for exact rows."
+        )
+    lines += [
         "",
         "## Before → after",
         "- **Before (observed at Northwind, cited):** ~3 analyst-days per monthly close, 100% manual",

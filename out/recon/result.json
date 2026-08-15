@@ -267,11 +267,19 @@
     "PAYOUT_SPLIT_MISMATCH": 1,
     "MISSING_IN_CRM": 1
   },
+  "disposition": {
+    "n_deal_ids_seen": 28,
+    "n_cleared": 20,
+    "n_exception_deals": 8,
+    "complete": true
+  },
   "conservation": {
     "crm_total_cents": 151550000,
     "cleared_total_cents": 114600000,
     "exception_crm_total_cents": 36950000,
-    "ok": true
+    "ok": true,
+    "orphan_payout_cents": 0,
+    "scope": "CRM-scoped: CRM closed-won total only \u2014 by construction this cannot see money invoiced or paid against a deal_id absent from the CRM export. That money is covered by `disposition` above and surfaced in the MISSING_IN_CRM / ORPHAN_PAYOUT exception totals, never folded into \"ties out\"."
   },
   "auto_clear_rate_pct": 71.4,
   "n_deals_seen": 28

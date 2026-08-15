@@ -32,6 +32,7 @@ exports before build; only the three-system shape and the drift types are docume
 |---|---|
 | deal in CRM, no invoice | `MISSING_INVOICE` |
 | invoice with no CRM deal | `MISSING_IN_CRM` |
+| payout with no CRM deal | `ORPHAN_PAYOUT` |
 | CRM amount ≠ invoiced total (cents-exact) | `AMOUNT_MISMATCH` |
 | invoice month ≠ close month | `DATE_SLIP` |
 | deduped payouts ≠ amount × split (cents-exact) | `PAYOUT_SPLIT_MISMATCH` |
@@ -42,10 +43,16 @@ A deal clears only if every check passes; every exception row carries the disagr
 
 ## Acceptance test — "answer-complete"
 
-1. **Total disposition:** every `deal_id` appearing in any of the three files is dispositioned
-   exactly once (cleared or exception); nothing silently dropped.
+1. **Total disposition:** every `deal_id` appearing in any of the three files — CRM, invoices, or
+   payouts — is dispositioned exactly once (cleared or exception); nothing silently dropped,
+   including a payout row referencing a `deal_id` the CRM export never mentions (`ORPHAN_PAYOUT`).
+   Shown in the summary's "Total disposition" block and asserted in code (`reconcile()`'s
+   `disposition.complete`).
 2. **Conservation:** CRM closed-won total = cleared total + exception-deals total, shown in the
-   summary and asserted in code.
+   summary and asserted in code. This check is scoped to `deal_id`s present in the CRM export by
+   construction — it cannot see money invoiced or paid against a `deal_id` absent from the CRM. That
+   money is a separate guarantee (test #1 above) and is reported separately (`MISSING_IN_CRM` /
+   `ORPHAN_PAYOUT` totals) rather than being folded into "ties out."
 3. **Evidence:** every exception carries ≥1 source-row reference; spot-checking 5 random exceptions
    against the raw files finds zero mismatches.
 4. **Determinism:** same inputs → byte-identical outputs, twice in a row.

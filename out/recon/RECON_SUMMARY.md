@@ -19,8 +19,11 @@
   - MISSING_IN_CRM: 1
   - PAYOUT_SPLIT_MISMATCH: 1
 
+## Total disposition (nothing silently dropped)
+- **28 deal_id(s)** seen across CRM ∪ invoices ∪ payouts — 20 cleared + 8 exceptioned = 28 → COMPLETE. Includes deal_ids that exist only in the payout tracker (no CRM or invoice record) — those surface as ORPHAN_PAYOUT below rather than disappearing.
+
 ## Conservation check (self-audit)
-- CRM closed-won total $1,515,500 = cleared $1,146,000 + exceptions $369,500 → TIES OUT
+- CRM closed-won total $1,515,500 = cleared $1,146,000 + exceptions $369,500 → TIES OUT (this check is CRM-scoped by construction — see Total disposition above for the guarantee that covers deal_ids the CRM export never mentions).
 
 ## Before → after
 - **Before (observed at Northwind, cited):** ~3 analyst-days per monthly close, 100% manual
