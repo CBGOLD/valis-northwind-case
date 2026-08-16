@@ -5,14 +5,21 @@ the smallest slice of the fix: **ask a question, get an answer-first read with e
 receipts, calibrated confidence, and what would change the answer** — plus one shipped automation
 aimed at the company's #1 documented time sink.
 
+## Start here
+
+**Live website:** [cbgold.github.io/valis-northwind-case](https://cbgold.github.io/valis-northwind-case/)
+— the executive Decide/Learn surface plus a working in-browser reconciliation. It is a self-contained
+root `index.html`: a zero-command path with no install, framework, font, CDN, or network dependency.
+Download the repo and open `index.html` directly if GitHub Pages is unavailable.
+
 Python 3.9+ stdlib only. Nothing to install. The untouched source bundle lives in
 `input/Northwind-in-a-box_charles/`.
 
-## Run it (two commands)
+## Reproduce it (optional; two commands)
 
 ```bash
 make demo    # the CEO's questions answered in the terminal, with receipts
-make all     # verify all 86 citations + rebuild out/ + run the 57-test suite
+make all     # verify all 86 citations + rebuild out/ + run the 66-test suite
 ```
 
 ## The answers (60-second version, as of 2026-06-18 — the bundle's export date)
@@ -64,7 +71,7 @@ python3 recon.py fixture --seed 7 --outdir /tmp/f && \
 python3 recon.py run --crm /tmp/f/SYNTHETIC_crm_deals_2026-06.csv \
   --invoices /tmp/f/SYNTHETIC_invoices_2026-06.csv \
   --payouts /tmp/f/SYNTHETIC_payouts_2026-06.csv --outdir /tmp/f/out   # unseen seed, same guarantees
-make test                                       # 57 tests incl. 100% recall/precision vs the fixture answer key
+make test                                       # 66 tests incl. browser/Python recon parity + fixture scoring
 ```
 
 Hand `recon.py run` any three CSVs matching the contract — a schema mismatch names the missing
