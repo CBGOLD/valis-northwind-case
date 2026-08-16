@@ -55,3 +55,28 @@ All times CEST. This log records real work only; no timestamps are backfilled.
 - Added five orphan-payout regression tests plus a README-count drift guard; updated the README to the discovered suite count.
 - Ran `make clean && make all && git diff --check`: **86/86 citations, 57/57 tests, deterministic generated artifacts, zero whitespace errors**.
 
+## 2026-08-16
+
+### 15:53 CEST — Executive microsite committed (`579db2b`)
+- Commit timestamp from `579db2b57a89b67889f2341d82dd13d9956cd405`; no wall time was backfilled.
+- Hermes delegation `deleg_d02432f8` implemented the self-contained root site and browser reconciliation; the stage ended with 66 tests passing.
+- Local browser verification exercised baseline reconciliation: 20/28 synthetic deal IDs auto-cleared, 8 exception deals/findings, conservation tied out, disposition complete, and no console errors.
+
+### 16:05 CEST — Audit fixes committed (`ef5d2f7`)
+- Commit timestamp from `ef5d2f7b89aaa3c8b5beee67b0059a6c55b3246a`; no wall time was backfilled.
+- Read-only Hermes delegation `deleg_d79665c8` had returned FAIL 83/100: its browser checks proved baseline/orphan/CSV behavior, but the then-advertised live URL returned 404 and it found a duplicate-ID parity defect plus accessibility/test gaps.
+- Claude CLI authentication was checked and returned **Expired**; no new Claude/Fable review occurred. A standalone Codex CLI review attempt returned **command not found**; no Codex CLI worker ran. Both are recorded as failed adaptations, not model successes.
+- Hermes delegation `deleg_c2c5d5b7` fixed duplicate CRM-ID rejection, visible failure handling, accessible table naming, and deterministic CSV coverage. The commit ended with 69 tests passing.
+
+### Final thorough pass — sequence after `ef5d2f7` (Hermes Agent)
+- Parent runtime disclosed as Hermes Agent orchestration on GPT-5.6-sol via openai-codex; delegated child model metadata was not exposed and is not inferred.
+- Redesigned Deliverable 03 around a four-step reviewer journey, added `REVIEW_GUIDE.md`, and exported sanitized Hermes provenance with deterministic SHA-256 manifest entries.
+- Final execution results are appended below after `make clean && make all` and browser interaction checks; the local commit follows verification.
+
+### 20:27 CEST — Final verification completed
+- Wall time captured directly during verification (`2026-08-16 20:27:11 CEST`); not reconstructed from narrative.
+- `make clean && make all`: 86/86 citations verified, deterministic outputs rebuilt, reconciliation baseline 20/28 auto-cleared (71.4%), 8 queued findings, conservation tied out, and **77/77 tests passed**.
+- Local browser interaction: baseline → evidence drill-down → orphan injection → CSV export completed through steps 2/3/4; CSV contained the expected quoted header plus 9 findings; orphan row present; zero console/JavaScript errors; zero horizontal overflow at the checked desktop viewport.
+- Live route loaded successfully and served the committed pre-final site. The final redesign remains local-only until an explicit push; no push occurred in this pass.
+- `git diff --check` and added-line secret/injection scan passed. Sanitized Hermes transcript exports contained no internal-reasoning markers or raw private home paths.
+

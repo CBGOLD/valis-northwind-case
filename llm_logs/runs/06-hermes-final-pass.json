@@ -1,0 +1,51 @@
+{
+  "run_id": "hermes-final-thorough-pass-2026-08-16",
+  "harness": "Hermes Agent",
+  "orchestrator": {
+    "model": "gpt-5.6-sol",
+    "provider": "openai-codex",
+    "role": "orchestration and final implementation"
+  },
+  "delegated_workers": {
+    "model_metadata": "not exposed by supplied delegation transcripts",
+    "records": [
+      {
+        "delegation_id": "deleg_d02432f8",
+        "role": "microsite implementation",
+        "result": "completed",
+        "commit": "579db2b57a89b67889f2341d82dd13d9956cd405",
+        "verification": "66 tests passed at that stage; browser baseline 20/28 with 8 exception deals"
+      },
+      {
+        "delegation_id": "deleg_d79665c8",
+        "role": "independent audit",
+        "result": "FAIL 83/100",
+        "verification": "browser baseline, orphan injection, CSV export, console and live-route checks; the then-advertised live route returned 404"
+      },
+      {
+        "delegation_id": "deleg_c2c5d5b7",
+        "role": "audit fixes",
+        "result": "completed",
+        "commit": "ef5d2f7b89aaa3c8b5beee67b0059a6c55b3246a",
+        "verification": "69 tests passed; duplicate CRM guard, CSV escaping, and accessible table naming verified"
+      }
+    ]
+  },
+  "adaptations": [
+    {
+      "attempt": "Claude CLI authentication check",
+      "result": "Expired",
+      "interpretation": "failed prerequisite; no new Claude or Fable review occurred; not a model success"
+    },
+    {
+      "attempt": "standalone Codex CLI review",
+      "result": "command not found",
+      "interpretation": "CLI absent; no Codex CLI worker ran; not a model success"
+    }
+  ],
+  "final_pass": {
+    "tests_before_new_work": 69,
+    "browser_verification": "required after implementation; final result recorded in BUILD_LOG.md",
+    "push": false
+  }
+}

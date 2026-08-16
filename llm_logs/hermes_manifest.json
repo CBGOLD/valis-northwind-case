@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "orchestrator": {
+    "harness": "Hermes Agent",
+    "model": "gpt-5.6-sol",
+    "provider": "openai-codex",
+    "role": "orchestration and final implementation pass"
+  },
+  "delegations": [
+    {
+      "delegation_id": "deleg_d02432f8",
+      "transcript": "llm_logs/transcripts/06-hermes-microsite-implementation.md",
+      "role": "delegated microsite implementation worker",
+      "result": "completed; commit 579db2b57a89b67889f2341d82dd13d9956cd405; 66 tests passed at that stage",
+      "child_model_metadata": "not exposed by delegation transcript",
+      "sha256": "264611bfe803889ab9f44c964332e92aa28f255c984100c2a3f9e6e08c9582eb",
+      "export_counts": {
+        "user": 1,
+        "assistant": 0,
+        "tool": 60,
+        "result": 60,
+        "final": 2
+      },
+      "source_alias": "Hermes cache/deleg_d02432f8/task-0.log"
+    },
+    {
+      "delegation_id": "deleg_d79665c8",
+      "transcript": "llm_logs/transcripts/07-hermes-independent-audit.md",
+      "role": "delegated independent read-only auditor",
+      "result": "completed; FAIL 83/100 because the then-advertised live route returned 404; three implementation findings recorded",
+      "child_model_metadata": "not exposed by delegation transcript",
+      "sha256": "3aca0f01c01f65142d050a5f911621326e4baf689df8041bfc006426dab0587a",
+      "export_counts": {
+        "user": 1,
+        "assistant": 0,
+        "tool": 53,
+        "result": 53,
+        "final": 2
+      },
+      "source_alias": "Hermes cache/deleg_d79665c8/task-0.log"
+    },
+    {
+      "delegation_id": "deleg_c2c5d5b7",
+      "transcript": "llm_logs/transcripts/08-hermes-audit-fixes.md",
+      "role": "delegated audit-fix worker",
+      "result": "completed; commit ef5d2f7b89aaa3c8b5beee67b0059a6c55b3246a; 69 tests passed",
+      "child_model_metadata": "not exposed by delegation transcript",
+      "sha256": "c3eeb85e401e8bc30b3abb6a5be6d94540b379efb2551529cd616df1725f284d",
+      "export_counts": {
+        "user": 1,
+        "assistant": 0,
+        "tool": 35,
+        "result": 35,
+        "final": 2
+      },
+      "source_alias": "Hermes cache/deleg_c2c5d5b7/task-0.log"
+    }
+  ],
+  "adaptations": [
+    "Claude CLI authentication check returned Expired; no new Claude/Fable review was claimed.",
+    "Standalone Codex CLI invocation returned command not found; this is an environment adaptation, not a model success."
+  ]
+}

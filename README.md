@@ -12,6 +12,10 @@ aimed at the company's #1 documented time sink.
 root `index.html`: a zero-command path with no install, framework, font, CDN, or network dependency.
 Download the repo and open `index.html` directly if GitHub Pages is unavailable.
 
+**Review it in five minutes:** follow [`REVIEW_GUIDE.md`](REVIEW_GUIDE.md) for the exact route—read the
+three decisions, run the baseline, inspect evidence, inject an orphan, export the queue, then audit
+the AI/process logs—with what each action proves and what remains deliberately out of scope.
+
 Python 3.9+ stdlib only. Nothing to install. The untouched source bundle lives in
 `input/Northwind-in-a-box_charles/`.
 
@@ -19,7 +23,7 @@ Python 3.9+ stdlib only. Nothing to install. The untouched source bundle lives i
 
 ```bash
 make demo    # the CEO's questions answered in the terminal, with receipts
-make all     # verify all 86 citations + rebuild out/ + run the 69-test suite
+make all     # verify all 86 citations + rebuild out/ + run the 77-test suite
 ```
 
 ## The answers (60-second version, as of 2026-06-18 — the bundle's export date)
@@ -71,7 +75,7 @@ python3 recon.py fixture --seed 7 --outdir /tmp/f && \
 python3 recon.py run --crm /tmp/f/SYNTHETIC_crm_deals_2026-06.csv \
   --invoices /tmp/f/SYNTHETIC_invoices_2026-06.csv \
   --payouts /tmp/f/SYNTHETIC_payouts_2026-06.csv --outdir /tmp/f/out   # unseen seed, same guarantees
-make test                                       # 69 tests incl. browser/Python recon parity + fixture scoring
+make test                                       # 77 tests incl. browser/Python recon parity + fixture scoring
 ```
 
 Hand `recon.py run` any three CSVs matching the contract — a schema mismatch names the missing
@@ -88,6 +92,7 @@ columns instead of guessing.
 | `docs/VALUE_NUMBER.md` | the CFO worksheet, attacks pre-answered |
 | `docs/BUILDER_SPEC.md` | one-page remote-builder spec: scope, data contract, acceptance test |
 | `docs/DECISIONS.md` | all 21 dirty-data judgment calls, one-line reasons |
+| `REVIEW_GUIDE.md` | explicit 5-minute reviewer route: action → proof → deliberate boundary |
 | `BUILD_LOG.md` / `llm_logs/` | timestamped build log; prompts + model runs (AI-native process, disclosed) |
 
 ## Limits, stated plainly
