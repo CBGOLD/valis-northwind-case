@@ -1,3 +1,5 @@
+import csv
+import io
 import json
 import re
 import subprocess
@@ -15,21 +17,28 @@ def site_text():
     return SITE.read_text(encoding="utf-8")
 
 
-def run_embedded_recon(inject=False):
+def run_embedded_javascript(command):
     html = site_text()
     match = re.search(r'<script id="recon-engine">([\s\S]*?)</script>', html)
     if not match:
         raise AssertionError("missing executable recon-engine script")
-    command = (
-        match.group(1)
-        + "\nconst r = NorthwindRecon.reconcile(NorthwindRecon.fixtures(), "
+    completed = subprocess.run(
+        ["node", "-e", match.group(1) + "\n" + command],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    return completed.stdout
+
+
+def run_embedded_recon(inject=False):
+    output = run_embedded_javascript(
+        "const r = NorthwindRecon.reconcile(NorthwindRecon.fixtures(), "
         + ("{injectOrphan:true}" if inject else "{}")
         + "); console.log(JSON.stringify(r));"
     )
-    completed = subprocess.run(
-        ["node", "-e", command], cwd=ROOT, text=True, capture_output=True, check=True
-    )
-    return json.loads(completed.stdout)
+    return json.loads(output)
 
 
 class TestExecutiveMicrosite(unittest.TestCase):
@@ -83,6 +92,21 @@ class TestExecutiveMicrosite(unittest.TestCase):
         })
         self.assertEqual(browser["exceptions"], python["exceptions"])
 
+    def test_browser_reconciliation_rejects_duplicate_crm_deal_id(self):
+        output = run_embedded_javascript("""
+const data = NorthwindRecon.fixtures();
+data.crm.push({...data.crm[0], _line: 999});
+try {
+  NorthwindRecon.reconcile(data);
+  process.exit(2);
+} catch (error) {
+  console.log(error.message);
+}
+""")
+        self.assertIn("duplicate deal_id BD-2606-01 in CRM export", output)
+        self.assertIn("SYNTHETIC_crm_deals_2026-06.csv:999", output)
+        self.assertIn("Reconciliation failed", site_text())
+
     def test_orphan_injection_is_safe_visible_and_exportable(self):
         html = site_text()
         self.assertIn('id="inject-orphan"', html)
@@ -104,6 +128,35 @@ class TestExecutiveMicrosite(unittest.TestCase):
             self.assertIn(phrase, html)
         self.assertIn('id="run-recon"', html)
         self.assertIn('aria-live="polite"', html)
+
+    def test_row_evidence_table_has_an_accessible_name(self):
+        html = site_text()
+        self.assertRegex(html, r'<h3 id="row-evidence-title">Row evidence</h3>[\s\S]*?<table aria-labelledby="row-evidence-title">')
+
+    def test_exception_csv_has_header_row_count_and_rfc4180_escaping(self):
+        exceptions = [
+            {
+                "deal_id": "BD-1",
+                "category": "TEST",
+                "detail": 'comma, quote " and\nnewline',
+                "evidence": ["one.csv:2", "two.csv:3"],
+            },
+            {
+                "deal_id": "BD-2",
+                "category": "PLAIN",
+                "detail": "ordinary",
+                "evidence": [],
+            },
+        ]
+        command = "console.log(JSON.stringify(NorthwindRecon.exceptionsCsv({exceptions:" + json.dumps(exceptions) + "})));"
+        exported = json.loads(run_embedded_javascript(command))
+        rows = list(csv.reader(io.StringIO(exported, newline="")))
+        self.assertEqual(rows[0], ["deal_id", "category", "detail", "evidence"])
+        self.assertEqual(len(rows) - 1, len(exceptions))
+        self.assertEqual(rows[1], ["BD-1", "TEST", 'comma, quote " and\nnewline', "one.csv:2;two.csv:3"])
+        self.assertEqual(rows[2], ["BD-2", "PLAIN", "ordinary", ""])
+        self.assertIn('"comma, quote "" and\nnewline"', exported)
+        self.assertTrue(exported.endswith("\r\n"))
 
     def test_evidence_and_method_views_link_to_repository(self):
         html = site_text()

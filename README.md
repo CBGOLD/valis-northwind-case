@@ -19,7 +19,7 @@ Python 3.9+ stdlib only. Nothing to install. The untouched source bundle lives i
 
 ```bash
 make demo    # the CEO's questions answered in the terminal, with receipts
-make all     # verify all 86 citations + rebuild out/ + run the 66-test suite
+make all     # verify all 86 citations + rebuild out/ + run the 69-test suite
 ```
 
 ## The answers (60-second version, as of 2026-06-18 — the bundle's export date)
@@ -71,7 +71,7 @@ python3 recon.py fixture --seed 7 --outdir /tmp/f && \
 python3 recon.py run --crm /tmp/f/SYNTHETIC_crm_deals_2026-06.csv \
   --invoices /tmp/f/SYNTHETIC_invoices_2026-06.csv \
   --payouts /tmp/f/SYNTHETIC_payouts_2026-06.csv --outdir /tmp/f/out   # unseen seed, same guarantees
-make test                                       # 66 tests incl. browser/Python recon parity + fixture scoring
+make test                                       # 69 tests incl. browser/Python recon parity + fixture scoring
 ```
 
 Hand `recon.py run` any three CSVs matching the contract — a schema mismatch names the missing
