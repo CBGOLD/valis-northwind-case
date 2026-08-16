@@ -31,6 +31,8 @@ The fastest route is the live page. If it is unavailable, open the root `index.h
 - **No measured savings claim:** ~3 analyst-days/month is reported testimony, not telemetry; this artifact does not convert it into invented ROI or hours saved.
 - **No deployment/integration claim:** source-system authentication, scheduling, write-back, approvals, ownership/SLA design, and production monitoring require a pilot on the real exports.
 - **No claim that fixture exception rates represent Northwind:** the fixture proves mechanics and failure handling only.
-- **No autonomous publication in this pass:** changes are committed locally and are not pushed.
+- **No autonomous publication:** nothing is pushed or published without explicit human review.
 
-For deeper reproduction, run `make clean && make all`; Python 3.9+ stdlib is the only requirement.
+For deeper reproduction, run `make clean && make all`. It needs Python 3.9+ (stdlib only), plus
+Node.js for the four browser-parity tests that execute the site's embedded engine. Opening the
+website itself requires nothing installed.

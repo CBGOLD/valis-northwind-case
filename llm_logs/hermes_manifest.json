@@ -13,7 +13,7 @@
       "role": "delegated microsite implementation worker",
       "result": "completed; commit 579db2b57a89b67889f2341d82dd13d9956cd405; 66 tests passed at that stage",
       "child_model_metadata": "not exposed by delegation transcript",
-      "sha256": "264611bfe803889ab9f44c964332e92aa28f255c984100c2a3f9e6e08c9582eb",
+      "sha256": "2a04a05e21b728673b374453cea5773d043535f5e4b00e425e840a1f9c887709",
       "export_counts": {
         "user": 1,
         "assistant": 0,
@@ -29,7 +29,7 @@
       "role": "delegated independent read-only auditor",
       "result": "completed; FAIL 83/100 because the then-advertised live route returned 404; three implementation findings recorded",
       "child_model_metadata": "not exposed by delegation transcript",
-      "sha256": "3aca0f01c01f65142d050a5f911621326e4baf689df8041bfc006426dab0587a",
+      "sha256": "c4c9aa2df4b90771b431d56183bf06e551da484c4caeefb0dbcecfb453625544",
       "export_counts": {
         "user": 1,
         "assistant": 0,
@@ -45,7 +45,7 @@
       "role": "delegated audit-fix worker",
       "result": "completed; commit ef5d2f7b89aaa3c8b5beee67b0059a6c55b3246a; 69 tests passed",
       "child_model_metadata": "not exposed by delegation transcript",
-      "sha256": "c3eeb85e401e8bc30b3abb6a5be6d94540b379efb2551529cd616df1725f284d",
+      "sha256": "63169e370c11ae271f613d5c1a2f56c0e2220a51c42e6e387e498eff5402fcd7",
       "export_counts": {
         "user": 1,
         "assistant": 0,
@@ -54,6 +54,22 @@
         "final": 2
       },
       "source_alias": "Hermes cache/deleg_c2c5d5b7/task-0.log"
+    },
+    {
+      "delegation_id": "deleg_5d1fc70f",
+      "transcript": "llm_logs/transcripts/09-hermes-thorough-pass.md",
+      "role": "delegated final thorough-pass worker",
+      "result": "completed; commit 7f75ea21d4588168a3c8f3edac142af1ecf9268d; 77 tests pass at that commit; the session ended at its iteration budget immediately after the local commit",
+      "child_model_metadata": "not exposed by delegation transcript",
+      "sha256": "4bfe0daf3bcdfb690bbf93ceb54df75b5d1ca785fedf44389d9befe336c492ab",
+      "export_counts": {
+        "user": 1,
+        "assistant": 0,
+        "tool": 78,
+        "result": 78,
+        "final": 2
+      },
+      "source_alias": "Hermes cache/deleg_5d1fc70f/task-0.log"
     }
   ],
   "adaptations": [

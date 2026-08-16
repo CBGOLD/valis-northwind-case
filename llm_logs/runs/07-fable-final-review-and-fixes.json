@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "source": "normalized from the three supplied run envelopes; raw envelopes remain outside the repository",
+  "session_id": "9b8063b5-283f-4740-9cad-410fd348d63a",
+  "canonical_model": "claude-fable-5",
+  "runs": [
+    {
+      "role": "review",
+      "session_id": "9b8063b5-283f-4740-9cad-410fd348d63a",
+      "canonical_model": "claude-fable-5",
+      "provider": "firstParty",
+      "is_error": false,
+      "num_turns": 30,
+      "stop_reason": "end_turn",
+      "terminal_reason": "completed",
+      "subtype": "success",
+      "total_cost_usd": 5.769933,
+      "errors": [],
+      "verdict": "PASS",
+      "score": 91,
+      "blocker_count": 0,
+      "high_count": 0,
+      "result_summary": "PASS 91/100; recommendation GO after two one-line pre-push documentation edits."
+    },
+    {
+      "role": "bounded_fix_attempt_1",
+      "session_id": "9b8063b5-283f-4740-9cad-410fd348d63a",
+      "canonical_model": "claude-fable-5",
+      "provider": "firstParty",
+      "is_error": true,
+      "num_turns": 16,
+      "stop_reason": "tool_use",
+      "terminal_reason": "max_turns",
+      "subtype": "error_max_turns",
+      "total_cost_usd": 3.893864,
+      "errors": [
+        "Reached maximum number of turns (15)"
+      ]
+    },
+    {
+      "role": "bounded_fix_attempt_2",
+      "session_id": "9b8063b5-283f-4740-9cad-410fd348d63a",
+      "canonical_model": "claude-fable-5",
+      "provider": "firstParty",
+      "is_error": true,
+      "num_turns": 13,
+      "stop_reason": "tool_use",
+      "terminal_reason": "max_turns",
+      "subtype": "error_max_turns",
+      "total_cost_usd": 5.644601000000001,
+      "errors": [
+        "Reached maximum number of turns (12)"
+      ]
+    }
+  ],
+  "totals": {
+    "cost_usd": 15.308398,
+    "cost_usd_exact": "15.308398000000001",
+    "reported_num_turns": 59,
+    "bounded_fix_attempt_limit_turns": 27
+  }
+}

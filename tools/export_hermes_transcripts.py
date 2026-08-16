@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Deterministically export the three supplied Hermes delegation logs.
+"""Deterministically export the four supplied Hermes delegation logs.
 
 The source map is deliberately expressed relative to the active home directory.
 Exports omit internal reasoning and sanitize machine/identity/credential context.
+skill_view result bodies (workstation skill documentation, including personal
+tooling unrelated to this repository) are omitted and replaced with an explicit
+marker so the export never ships environment context the evaluation does not need.
 """
 import hashlib
 import json
@@ -37,7 +40,20 @@ DELEGATIONS = (
         "role": "delegated audit-fix worker",
         "result": "completed; commit ef5d2f7b89aaa3c8b5beee67b0059a6c55b3246a; 69 tests passed",
     },
+    {
+        "delegation_id": "deleg_5d1fc70f",
+        "source": "deleg_5d1fc70f/task-0.log",
+        "transcript": "llm_logs/transcripts/09-hermes-thorough-pass.md",
+        "role": "delegated final thorough-pass worker",
+        "result": (
+            "completed; commit 7f75ea21d4588168a3c8f3edac142af1ecf9268d; "
+            "77 tests pass at that commit; the session ended at its iteration "
+            "budget immediately after the local commit"
+        ),
+    },
 )
+
+SKILL_BODY = re.compile(r"^(skill_view\s+\S+\s+[0-9.]+s):\s*(.*)$", re.DOTALL)
 
 
 def sanitize(value):
@@ -62,6 +78,17 @@ def bounded(value):
     return text[:MAX_FIELD] + f" …[truncated at {MAX_FIELD} characters]"
 
 
+def bounded_result(value):
+    match = SKILL_BODY.match(str(value))
+    if match:
+        header, body = match.groups()
+        return (
+            f"{sanitize(header)}: [skill documentation body omitted — {len(body)} characters "
+            "of workstation tooling docs, not relevant to this repository]"
+        )
+    return bounded(value)
+
+
 def export_one(record):
     source = CACHE / record["source"]
     if not source.is_file():
@@ -71,6 +98,7 @@ def export_one(record):
         "",
         "> Submission-safe export from the supplied Hermes live transcript.",
         "> Internal reasoning is excluded. Tool fields are bounded; machine paths, identity data, and credential-shaped strings are sanitized.",
+        "> skill_view result bodies (workstation skill documentation) are omitted with an explicit marker; only the skill name, status, and duration are kept.",
         "> Child model/provider metadata was not exposed by this transcript; no child model is inferred.",
         "",
         f"- **Delegation ID:** `{record['delegation_id']}`",
@@ -86,7 +114,8 @@ def export_one(record):
         role, content = match.groups()
         counts[role] += 1
         label = {"user": "User", "assistant": "Assistant", "tool": "Tool call", "result": "Tool result", "final": "Final"}[role]
-        blocks.extend([f"## {label} {counts[role]}", "", bounded(content), ""])
+        rendered = bounded_result(content) if role == "result" else bounded(content)
+        blocks.extend([f"## {label} {counts[role]}", "", rendered, ""])
     blocks.extend(["---", "", "Export counts: " + " · ".join(f"{counts[key]} {key}" for key in counts) + ".", ""])
     destination = ROOT / record["transcript"]
     destination.parent.mkdir(parents=True, exist_ok=True)

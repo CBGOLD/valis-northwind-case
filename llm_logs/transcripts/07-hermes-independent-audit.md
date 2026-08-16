@@ -2,6 +2,7 @@
 
 > Submission-safe export from the supplied Hermes live transcript.
 > Internal reasoning is excluded. Tool fields are bounded; machine paths, identity data, and credential-shaped strings are sanitized.
+> skill_view result bodies (workstation skill documentation) are omitted with an explicit marker; only the skill name, status, and duration are kept.
 > Child model/provider metadata was not exposed by this transcript; no child model is inferred.
 
 - **Delegation ID:** `deleg_d79665c8`
@@ -21,11 +22,11 @@ kickoff: Independently audit commit 579db2b57a89b67889f2341d82dd13d9956cd405 ver
 
 ## Tool result 1
 
-skill_view ok 0.0s: {"success": true, "name": "github-code-review", "description": "Review PRs: diffs, inline comments via gh or REST.", "tags": ["GitHub", "Code-Review", "Pull-Requests", "Git", "Quality"], "related_skills": ["github-auth", "github-pr-workflow"], "content": "---\nname: github-code-review\ndescription: \"Review PRs: diffs, inline comments via gh or REST.\"\nversion: 1.1.0\nauthor: Hermes Agent\nlicens …(+14872 chars)
+skill_view ok 0.0s: [skill documentation body omitted — 416 characters of workstation tooling docs, not relevant to this repository]
 
 ## Tool result 2
 
-skill_view ok 0.0s: {"success": true, "name": "codebase-inspection", "description": "Inspect codebases w/ pygount: LOC, languages, ratios.", "tags": ["LOC", "Code Analysis", "pygount", "Codebase", "Metrics", "Repository"], "related_skills": ["github-repo-management"], "content": "---\nname: codebase-inspection\ndescription: \"Inspect codebases w/ pygount: LOC, languages, ratios.\"\nversion: 1.0.0\nauthor: Hermes Agen …(+4153 chars)
+skill_view ok 0.0s: [skill documentation body omitted — 415 characters of workstation tooling docs, not relevant to this repository]
 
 ## Tool call 3
 
