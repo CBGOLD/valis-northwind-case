@@ -16,6 +16,10 @@ Download the repo and open `index.html` directly if GitHub Pages is unavailable.
 three decisions, run the baseline, inspect evidence, inject an orphan, export the queue, then audit
 the AI/process logs—with what each action proves and what remains deliberately out of scope.
 
+**Build & AI logs:** [`BUILD_LOG.md`](BUILD_LOG.md) is the timestamped work log. [`llm_logs/README.md`](llm_logs/README.md)
+is the index of every prompt, run, and transcript. These are plain files in this repository, not GitHub
+"commit history with timers" — open them directly if the GitHub UI doesn't surface timing for you.
+
 Opening the website needs nothing installed — it is one self-contained HTML file. Reproducing the
 build needs Python 3.9+ (stdlib only); `make test` additionally uses Node.js to execute the four
 browser-parity tests against the embedded engine. The untouched source bundle lives in
@@ -25,7 +29,7 @@ browser-parity tests against the embedded engine. The untouched source bundle li
 
 ```bash
 make demo    # the CEO's questions answered in the terminal, with receipts
-make all     # verify all 86 citations + rebuild out/ + run the 84-test suite
+make all     # verify all 86 citations + rebuild out/ + run the 85-test suite
 ```
 
 ## The answers (60-second version, as of 2026-06-18 — the bundle's export date)
@@ -77,7 +81,7 @@ python3 recon.py fixture --seed 7 --outdir /tmp/f && \
 python3 recon.py run --crm /tmp/f/SYNTHETIC_crm_deals_2026-06.csv \
   --invoices /tmp/f/SYNTHETIC_invoices_2026-06.csv \
   --payouts /tmp/f/SYNTHETIC_payouts_2026-06.csv --outdir /tmp/f/out   # unseen seed, same guarantees
-make test                                       # 84 tests incl. browser/Python recon parity (Node.js) + fixture scoring
+make test                                       # 85 tests incl. browser/Python recon parity (Node.js) + fixture scoring
 ```
 
 Hand `recon.py run` any three CSVs matching the contract — a schema mismatch names the missing

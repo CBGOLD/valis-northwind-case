@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source": "normalized from supplied run envelopes; raw envelopes remain outside the repository",
+  "session_id": "b6b433a2-7137-4bbc-bc5b-cf9affb838e0",
+  "canonical_model": "claude-sonnet-5",
+  "runs": [
+    {
+      "role": "attempt_1",
+      "session_id": "b6b433a2-7137-4bbc-bc5b-cf9affb838e0",
+      "is_error": true,
+      "num_turns": 11,
+      "stop_reason": "tool_use",
+      "terminal_reason": "max_turns",
+      "subtype": "error_max_turns",
+      "total_cost_usd": 1.2047618999999998,
+      "errors": [
+        "Reached maximum number of turns (10)"
+      ]
+    },
+    {
+      "role": "attempt_2",
+      "session_id": "b6b433a2-7137-4bbc-bc5b-cf9affb838e0",
+      "is_error": false,
+      "num_turns": 1,
+      "stop_reason": "end_turn",
+      "terminal_reason": "completed",
+      "subtype": "success",
+      "total_cost_usd": 0.9567792000000002,
+      "errors": [],
+      "result": "## Verdict: **PASS** (with one verification gap I did not close)\n\nReviewed independently against the six criteria, using the diff, the full current `index.html`, `BUILD_LOG.md`, `REVIEW_GUIDE.md`, the test-file diffs, and direct filesystem/git checks. I was told to stop before executing `make test`, so that one item is reported as unverified rather than assumed passing.\n\n### Findings, severity-ranked\n\n**MEDIUM — verification gap (mine, not a confirmed defect in the artifact).** I never ran `make test`. I only confirmed toolchain prerequisites (`python3 --version` → 3.9.6, `node --version` → v25.8.2 — both satisfy the Makefile's stated requirements). The commit message and `BUILD_LOG.md`/`README.md` claim \"84/84 tests passed,\" but I did not reproduce that number myself. Recommend running `make clean && make all` before treating this as gauntlet-verified.\n\n**LOW — no `.nojekyll` at repo root.** Under GitHub Pages' default Jekyll processing this is usually where relative `.md` links break (Jekyll converts front-matter files to `.html`, changing their served path). I checked all eight linked `.md` files (`BUILD_LOG.md`, `REVIEW_GUIDE.md`, `docs/DECISIONS.md`, `docs/BUILDER_SPEC.md`, `docs/VALUE_NUMBER.md`, `out/AUDIT.md`, `fixtures/README.md`, `llm_logs/README.md`) — none start with `---` front matter, so Jekyll treats them as static files and copies them through unchanged. Risk is mitigated but not eliminated (I can't inspect the repo's actual Pages source setting from this worktree; BUILD_LOG's own history says the live URL has worked before at this same layout).\n\n**LOW / informational.** The \"stand-in file, not real data\" caveat for Deliverable 3 lives in the Automation section body, not in the 4-card scorecard copy itself. Acceptable — the scorecard sits at the very top and the hard-to-miss \"STAND-IN FILE, NOT REAL NORTHWIND DATA\" banner is immediately below it — but a reader skimming only the scorecard in the first ~10 seconds hasn't yet hit that disclosure.\n\nNo BLOCKER or HIGH defects found in what I reviewed.\n\n### Criteria results\n\n1. **Four deliverables obvious in 30s** — PASS. First section after the hero is a 4-card scorecard (`#deliverables`) — Answers / CFO number / Automation / Build log — each with a status pill and jump link, structurally forced to precede the detail sections (`test_four_deliverables_are_visible_with_plain_labels_and_status` asserts `deliverables` index < `answers` < `value` < `automation` in the HTML source).\n2. **Plain language, no slop** — PASS. Jargon swapped for plain phrasing throughout (\"Conservation\"→\"Money check,\" \"Disposition\"→\"Every deal accounted for,\" \"SYNTHETIC DEMO\"→\"STAND-IN FILE, NOT REAL NORTHWIND DATA\"); banned-phrase test (`gauntlet`, `bounded answer`, `verify two loose ends`) has no hits in visible copy I read; AI-disclosure section names only \"Claude,\" no \"Fable/Hermes/Opus/GPT-5.\"\n3. **Claims/synthetic boundary truthful** — PASS on internal consistency: arithmetic checks out ($81,000 − $7,500 = $73,500; $7,500/$81,000 = 9.3%; ×4 = $30,000), synthetic-vs-real boundary is stated explicitly and repeated in the Proof section. Not independently re-verified against raw CSVs this pass (I did earlier in the session, before being told to stop; not re-confirmed against a fresh `make check`/`ask.py check` run here).\n4. **Timed logs visibly restored** — PASS. `#buildlog` section has a 12-item `<ol class=\"timeline\">`, each `<li>` with a `<time>` tag and plain-English description, linking out to the full `BUILD_LOG.md`.\n5. **Public links resolve on GitHub Pages** — PASS, with the Jekyll caveat above. Every local `href` in `index.html` (`grep -o 'href=\"[^\"]*\"' index.html`) resolves to a file confirmed present via `ls` and tracked via `git ls-files` / `git check-ignore -v` (none ignored, working tree clean).\n6. **Blocker/high/medium defects** — one MEDIUM logged above (my own unexecuted test run), no others found.\n\n### Exact commands run and key results\n\n```\ngit show --stat 5427c9f\n→ 6 files changed, 334 insertions(+), 127 deletions(-)\n\ngrep -o 'href=\"[^\"]*\"' index.html | sort -u\n→ BUILD_LOG.md, REVIEW_GUIDE.md, docs/BUILDER_SPEC.md, docs/DECISIONS.md,\n  docs/VALUE_NUMBER.md, evidence/citations.json, fixtures/README.md,\n  llm_logs/README.md, out/AUDIT.md, https://github.com/CBGOLD/valis-northwind-case, anchors\n\ngit check-ignore -v evidence/citations.json out/AUDIT.md docs/DECISIONS.md \\\n  docs/BUILDER_SPEC.md docs/VALUE_NUMBER.md fixtures/README.md \\\n  llm_logs/README.md BUILD_LOG.md REVIEW_GUIDE.md\n→ (no output — none ignored, all tracked)\n\nfind . -iname \"_config.yml\" -o -iname \"CNAME\" -o -path \"*/.github/workflows/*\"\n→ (no output — no Jekyll config, no CNAME, no Pages workflow)\n\nfor f in BUILD_LOG.md REVIEW_GUIDE.md docs/DECISIONS.md docs/BUILDER_SPEC.md \\\n  docs/VALUE_NUMBER.md out/AUDIT.md fixtures/README.md llm_logs/README.md; do head -c 60 \"$f\"; done\n→ all start with \"# ...\" — no YAML front matter on any linked .md file\n\npython3 --version → Python 3.9.6\nnode --version → v25.8.2\n```\n\n`make test` was **not executed** in this session — stopped per instruction before running it."
+    }
+  ],
+  "totals": {
+    "cost_usd": 2.1615411,
+    "reported_num_turns": 12
+  },
+  "outcome_note": "First envelope ended at its configured turn limit. The resumed envelope completed cleanly (terminal_reason completed, subtype success) and returned the verbatim verdict quoted below."
+}

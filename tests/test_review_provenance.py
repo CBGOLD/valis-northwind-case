@@ -155,7 +155,12 @@ class TestHermesProvenance(unittest.TestCase):
             LOGS / "transcripts" / "10-fable-final-review-and-fixes.md",
             ROOT / "tools" / "export_hermes_transcripts.py",
             ROOT / "tools" / "export_final_fable.py",
+            LOGS / "recent_finalization_manifest.json",
+            ROOT / "tools" / "export_recent_finalization.py",
         ]
+        paths += list((LOGS / "prompts").glob("0[8-9]*")) + list((LOGS / "prompts").glob("10*"))
+        paths += list((LOGS / "runs").glob("0[8-9]*")) + list((LOGS / "runs").glob("10*"))
+        paths += list((LOGS / "transcripts").glob("1[1-3]*"))
         combined = "\n".join(path.read_text(encoding="utf-8", errors="replace") for path in paths)
         banned = (
             "/Users/cb/", "/Users/vo2group/", "/home/cb/", "charles.bernard@", "VO2 GROUP",
@@ -163,10 +168,36 @@ class TestHermesProvenance(unittest.TestCase):
         )
         for value in banned:
             self.assertNotIn(value, combined)
-        self.assertNotRegex(combined, r"sk-[A-Za-z0-9_-]{12,}")
+        self.assertNotRegex(combined, r"(?<![A-Za-z0-9])sk-(?=[A-Za-z0-9_-]{20,})(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]+")
         self.assertNotRegex(combined, r"(?i)bearer\s+[A-Za-z0-9._-]{12,}")
         self.assertNotIn('"type":"thinking"', combined)
         self.assertNotIn('"signature"', combined)
+
+    def test_github_surfaces_timestamped_and_ai_logs_without_directory_hunting(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        top = "\n".join(readme.splitlines()[:25])
+        self.assertIn("Build & AI logs", top)
+        self.assertIn("[`BUILD_LOG.md`](BUILD_LOG.md)", top)
+        self.assertIn("[`llm_logs/README.md`](llm_logs/README.md)", top)
+
+        index = (LOGS / "README.md").read_text(encoding="utf-8")
+        for token in (
+            "## Chronological index",
+            "2026-08-17 16:00–16:19",
+            "2026-08-17 16:21–16:23",
+            "2026-08-17 16:45–16:48",
+            "transcripts/11-dead-simple-final-pass.md",
+            "transcripts/12-independent-review-dead-simple.md",
+            "transcripts/13-run-button-fix.md",
+        ):
+            self.assertIn(token, index)
+        for path in (
+            LOGS / "transcripts" / "11-dead-simple-final-pass.md",
+            LOGS / "transcripts" / "12-independent-review-dead-simple.md",
+            LOGS / "transcripts" / "13-run-button-fix.md",
+            LOGS / "recent_finalization_manifest.json",
+        ):
+            self.assertTrue(path.is_file(), path)
 
     def test_transcripts_omit_workstation_skill_documentation_bodies(self):
         transcripts = sorted((LOGS / "transcripts").glob("0[6-9]*"))

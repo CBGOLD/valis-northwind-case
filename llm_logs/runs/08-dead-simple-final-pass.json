@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "source": "normalized from supplied run envelopes; raw envelopes remain outside the repository",
+  "session_id": "f6f2895b-748e-4576-904e-b3783efcb5dd",
+  "canonical_model": "claude-sonnet-5",
+  "runs": [
+    {
+      "role": "attempt_1",
+      "session_id": "f6f2895b-748e-4576-904e-b3783efcb5dd",
+      "is_error": true,
+      "num_turns": 46,
+      "stop_reason": "tool_use",
+      "terminal_reason": "aborted_streaming",
+      "subtype": "error_during_execution",
+      "total_cost_usd": 2.1554925,
+      "errors": [
+        "[ede_diagnostic] result_type=user last_content_type=n/a stop_reason=tool_use"
+      ]
+    },
+    {
+      "role": "attempt_2",
+      "session_id": "f6f2895b-748e-4576-904e-b3783efcb5dd",
+      "is_error": true,
+      "num_turns": 11,
+      "stop_reason": "tool_use",
+      "terminal_reason": "max_turns",
+      "subtype": "error_max_turns",
+      "total_cost_usd": 1.4130479999999999,
+      "errors": [
+        "Reached maximum number of turns (10)"
+      ]
+    },
+    {
+      "role": "attempt_3",
+      "session_id": "f6f2895b-748e-4576-904e-b3783efcb5dd",
+      "is_error": true,
+      "num_turns": 21,
+      "stop_reason": "tool_use",
+      "terminal_reason": "max_turns",
+      "subtype": "error_max_turns",
+      "total_cost_usd": 3.1049082000000006,
+      "errors": [
+        "Reached maximum number of turns (20)"
+      ]
+    },
+    {
+      "role": "attempt_4",
+      "session_id": "f6f2895b-748e-4576-904e-b3783efcb5dd",
+      "is_error": true,
+      "num_turns": 16,
+      "stop_reason": "tool_use",
+      "terminal_reason": "max_turns",
+      "subtype": "error_max_turns",
+      "total_cost_usd": 2.9970933,
+      "errors": [
+        "Reached maximum number of turns (15)"
+      ]
+    }
+  ],
+  "totals": {
+    "cost_usd": 9.670542,
+    "reported_num_turns": 94
+  },
+  "outcome_note": "All four envelopes ended without a clean success terminal state (aborted_streaming, then three max_turns cutoffs). The commit that followed immediately after (5427c9f) is the verifiable product of this work; the envelopes themselves are not relabeled as success."
+}

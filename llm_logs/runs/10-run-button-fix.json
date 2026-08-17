@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "source": "normalized from supplied run envelopes; raw envelopes remain outside the repository",
+  "session_id": "800ed7d8-9ce4-4d26-8678-77fe46df870a",
+  "canonical_model": "claude-sonnet-5",
+  "runs": [
+    {
+      "role": "attempt_1",
+      "session_id": "800ed7d8-9ce4-4d26-8678-77fe46df870a",
+      "is_error": true,
+      "num_turns": 13,
+      "stop_reason": "tool_use",
+      "terminal_reason": "max_turns",
+      "subtype": "error_max_turns",
+      "total_cost_usd": 1.1814504,
+      "errors": [
+        "Reached maximum number of turns (12)"
+      ]
+    },
+    {
+      "role": "attempt_2",
+      "session_id": "800ed7d8-9ce4-4d26-8678-77fe46df870a",
+      "is_error": true,
+      "num_turns": 9,
+      "stop_reason": "tool_use",
+      "terminal_reason": "max_turns",
+      "subtype": "error_max_turns",
+      "total_cost_usd": 1.0493274,
+      "errors": [
+        "Reached maximum number of turns (8)"
+      ]
+    }
+  ],
+  "totals": {
+    "cost_usd": 2.2307778,
+    "reported_num_turns": 22
+  },
+  "outcome_note": "Both envelopes ended at their configured turn limit (max_turns); neither is a success terminal state. The commit that followed immediately after (554126e) is the verifiable product of this work, verified separately by make test and browser interaction."
+}

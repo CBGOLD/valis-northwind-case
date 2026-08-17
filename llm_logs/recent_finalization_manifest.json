@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "sessions": [
+    {
+      "key": "dead_simple_final_pass",
+      "session_id": "f6f2895b-748e-4576-904e-b3783efcb5dd",
+      "canonical_model": "claude-sonnet-5",
+      "artifacts": [
+        {
+          "path": "llm_logs/prompts/08_dead_simple_final_pass.md",
+          "sha256": "80bcae51bfa0bdac8e458682d49c31c3a795e2b6634b86ba6cc52290c58d9e53"
+        },
+        {
+          "path": "llm_logs/runs/08-dead-simple-final-pass.json",
+          "sha256": "e5fe73552c6d880a6ccaf80b0b9e7aa9a5319625fe458206ceb11754be363ca2"
+        },
+        {
+          "path": "llm_logs/transcripts/11-dead-simple-final-pass.md",
+          "sha256": "40f876d6684a3f418df657f1714c837d0eb95c651402453bcef26fedd7bfc8cd"
+        }
+      ],
+      "visible_transcript_counts": {
+        "user_prompts": 4,
+        "assistant_text": 22,
+        "tool_calls": 89,
+        "tool_results": 89
+      },
+      "run_outcomes": [
+        {
+          "role": "attempt_1",
+          "terminal_reason": "aborted_streaming",
+          "subtype": "error_during_execution",
+          "num_turns": 46,
+          "total_cost_usd": 2.1554925
+        },
+        {
+          "role": "attempt_2",
+          "terminal_reason": "max_turns",
+          "subtype": "error_max_turns",
+          "num_turns": 11,
+          "total_cost_usd": 1.4130479999999999
+        },
+        {
+          "role": "attempt_3",
+          "terminal_reason": "max_turns",
+          "subtype": "error_max_turns",
+          "num_turns": 21,
+          "total_cost_usd": 3.1049082000000006
+        },
+        {
+          "role": "attempt_4",
+          "terminal_reason": "max_turns",
+          "subtype": "error_max_turns",
+          "num_turns": 16,
+          "total_cost_usd": 2.9970933
+        }
+      ]
+    },
+    {
+      "key": "independent_review_dead_simple",
+      "session_id": "b6b433a2-7137-4bbc-bc5b-cf9affb838e0",
+      "canonical_model": "claude-sonnet-5",
+      "artifacts": [
+        {
+          "path": "llm_logs/prompts/09_independent_review_dead_simple.md",
+          "sha256": "bfcb42cc4c9e23993ccb69b85559c6071be4d7ceff61d0605e3654a58dd2c011"
+        },
+        {
+          "path": "llm_logs/runs/09-independent-review-dead-simple.json",
+          "sha256": "7bf9cc08c6d5daaa49f64d62bd490d5bf05b64a8edf89c4a87b3fd20b469e296"
+        },
+        {
+          "path": "llm_logs/transcripts/12-independent-review-dead-simple.md",
+          "sha256": "14bac92bf1660a63ca89f4ec04c325b710decda972aa5985700afb7b6aaf6abe"
+        }
+      ],
+      "visible_transcript_counts": {
+        "user_prompts": 2,
+        "assistant_text": 3,
+        "tool_calls": 19,
+        "tool_results": 19
+      },
+      "run_outcomes": [
+        {
+          "role": "attempt_1",
+          "terminal_reason": "max_turns",
+          "subtype": "error_max_turns",
+          "num_turns": 11,
+          "total_cost_usd": 1.2047618999999998
+        },
+        {
+          "role": "attempt_2",
+          "terminal_reason": "completed",
+          "subtype": "success",
+          "num_turns": 1,
+          "total_cost_usd": 0.9567792000000002
+        }
+      ]
+    },
+    {
+      "key": "run_button_fix",
+      "session_id": "800ed7d8-9ce4-4d26-8678-77fe46df870a",
+      "canonical_model": "claude-sonnet-5",
+      "artifacts": [
+        {
+          "path": "llm_logs/prompts/10_run_button_fix.md",
+          "sha256": "0d485bb80930cef591771a6c840968e5cb7751fca23f71ab8150e00ee7bd5e31"
+        },
+        {
+          "path": "llm_logs/runs/10-run-button-fix.json",
+          "sha256": "7d1e1ad851484b2a7120f29b63845f2b8438d143f6e78cfd65655ba875c15af2"
+        },
+        {
+          "path": "llm_logs/transcripts/13-run-button-fix.md",
+          "sha256": "a51eeadb3e3cde213fe16204f6739229796c04f368bc79d51847c52d3bba60ad"
+        }
+      ],
+      "visible_transcript_counts": {
+        "user_prompts": 2,
+        "assistant_text": 7,
+        "tool_calls": 29,
+        "tool_results": 29
+      },
+      "run_outcomes": [
+        {
+          "role": "attempt_1",
+          "terminal_reason": "max_turns",
+          "subtype": "error_max_turns",
+          "num_turns": 13,
+          "total_cost_usd": 1.1814504
+        },
+        {
+          "role": "attempt_2",
+          "terminal_reason": "max_turns",
+          "subtype": "error_max_turns",
+          "num_turns": 9,
+          "total_cost_usd": 1.0493274
+        }
+      ]
+    }
+  ]
+}

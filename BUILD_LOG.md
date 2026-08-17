@@ -103,3 +103,20 @@ All times CEST. This log records real work only; no timestamps are backfilled.
 - Ran `make clean && make all`: **86/86 citations verified**, baseline **20/28 auto-cleared**, **8 findings**, conservation `TIES OUT`, and **84/84 tests passed**.
 - Browser review confirmed the four deliverables are visible in the first viewport, the synthetic boundary is explicit, and advanced failure/export controls remain available without dominating the main path.
 
+### 16:19 CEST — Dead-simple public page committed (`5427c9f`)
+- Commit `5427c9f6fccf35f656b62d1b9b8d5fc8761f50aa` made the four deliverables visible within the first viewport and restored the timestamped build log directly on the page.
+- The associated Sonnet envelopes ended at streaming/turn limits rather than success; sanitized prompts, run records, and visible transcripts are indexed under `llm_logs/README.md`.
+
+### 16:23 CEST — GitHub Pages artifact paths hardened (`5ae28d6`)
+- Added `.nojekyll` so linked Markdown, JSON, and log artifacts are served verbatim instead of depending on Jekyll path rewriting.
+- Published and verified the live site plus all reviewer-facing artifact routes.
+
+### 16:48 CEST — Reported automation-button UX defect fixed (`554126e`)
+- Reproduced the report: activation could complete without moving the reviewer to the changed results, so it appeared to do nothing.
+- Added explicit busy/completed button states, result focus, and mobile-friendly reveal behavior. Live browser verification returned **20/28 cleared**, **8/8 flagged**, money check passed, every deal accounted for, and zero console errors.
+- `make test` passed **84/84 tests** before this log-index regression test was added.
+
+### 17:01 CEST — GitHub log discoverability and recent provenance prepared
+- Added a prominent **Build & AI logs** block to the root README, a chronological clickable index in `llm_logs/README.md`, and sanitized records for the Aug 17 dead-simple pass, independent review, and button fix.
+- Added deterministic coverage for top-level discoverability, link targets, sanitization, and recent-log presence; suite now contains **85 tests**.
+
