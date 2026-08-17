@@ -20,12 +20,12 @@ class TestReviewerRoute(unittest.TestCase):
         self.assertIn("5-minute reviewer route", text)
         actions = [
             "Open the live site",
-            "Read the three decisions",
-            "Run baseline",
-            "Inspect one exception",
-            "Inject orphan",
-            "Export queue",
-            "Inspect AI/process logs",
+            "Read \"the four things you asked for\"",
+            "Run the automation",
+            "Pick one flagged deal",
+            "Add a payout with no matching deal",
+            "Export the review list",
+            "Read the build log and AI disclosure",
         ]
         positions = [text.index(action) for action in actions]
         self.assertEqual(positions, sorted(positions))
@@ -42,38 +42,21 @@ class TestReviewerRoute(unittest.TestCase):
 
 
 class TestDeliverableThreeContract(unittest.TestCase):
-    def test_guided_sequence_and_executive_explainer_are_explicit(self):
-        html = SITE.read_text(encoding="utf-8")
-        for phrase in (
-            "1 Understand",
-            "2 Run baseline",
-            "3 Break it",
-            "4 Export queue",
-            "Why this workflow",
-            "What goes in",
-            "What Run does",
-            "How to read the result",
-            "Operational output",
-        ):
-            self.assertIn(phrase, html)
+    """Deliverable 3 (the shipped automation) contract, beyond what
+    test_microsite's TestExecutiveMicrosite already covers: the how-it-works
+    explainer stays present and demoted under the advanced disclosure."""
 
-    def test_fixture_facts_and_truth_boundaries_are_exact(self):
+    def test_how_it_works_explainer_is_present_under_advanced(self):
         html = SITE.read_text(encoding="utf-8")
-        for phrase in (
-            "27 CRM rows",
-            "27 invoice rows",
-            "40 payout rows",
-            "28 deal IDs",
-            "20 / 28",
-            "71.4%",
-            "8 evidence-backed findings",
-            "~3 analyst-days/month is reported, not measured",
-            "$4.2M/qtr brand revenue",
-            "REAL OPERATIONAL EXPORTS WERE NOT SUPPLIED",
-        ):
-            self.assertIn(phrase, html)
+        automation = re.search(r'<section class="panel" id="automation">[\s\S]*?</section>', html)
+        self.assertIsNotNone(automation)
+        block = automation.group(0)
+        advanced_start = block.index('class="advanced-toggle"')
+        advanced = block[advanced_start:]
+        for phrase in ("What goes in", "What Run does", "How to read the result"):
+            self.assertIn(phrase, advanced)
 
-    def test_demo_has_progression_drilldown_conservation_and_output(self):
+    def test_demo_has_progression_drilldown_and_outcome_ids(self):
         html = SITE.read_text(encoding="utf-8")
         for token in (
             'id="demo-progress"',
@@ -83,9 +66,8 @@ class TestDeliverableThreeContract(unittest.TestCase):
             'id="run-recon"',
             'id="inject-orphan"',
             'id="export-exceptions"',
-            "Conservation",
-            "Disposition",
-            "CSV review queue",
+            'id="conservation-state"',
+            'id="disposition-state"',
         ):
             self.assertIn(token, html)
 

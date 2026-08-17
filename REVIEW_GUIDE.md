@@ -2,28 +2,28 @@
 
 ## 5-minute reviewer route
 
-The fastest route is the live page. If it is unavailable, open the root `index.html` directly; both are the same self-contained artifact.
+The fastest route is the live page. If it is unavailable, open the root `index.html` directly; both are the same self-contained page — every link on it is a relative path, so it works either way.
 
 1. **Open the live site** — <https://cbgold.github.io/valis-northwind-case/>
-   **Proves:** the submission has a zero-command executive surface; the local-file fallback proves it has no runtime service dependency.
+   **Proves:** no install, no command, no service dependency — the local-file fallback proves it.
 
-2. **Read the three decisions** at the top: SaaS spend, Sales hiring, and automate-first.
-   **Proves:** the real supplied bundle resolves into answer-first decisions with confidence, boundary, and next action—not a generic dashboard.
+2. **Read "the four things you asked for"** at the top, then the two direct answers below it.
+   **Proves:** the real supplied bundle resolves into plain-English answers with confidence, sources, and a next action — not a generic dashboard.
 
-3. **Run baseline** in Deliverable 03.
-   **Proves:** the browser executes the committed synthetic fixture locally and reproduces the deterministic control: 20/28 deal IDs auto-clear (71.4%); 8 evidence-backed findings enter the queue.
+3. **Run the automation** in the Automation section.
+   **Proves:** the browser executes the committed stand-in file locally and reproduces the deterministic result: 20 of 28 deals clear automatically; 8 are flagged for review.
 
-4. **Inspect one exception** by selecting an evidence row.
-   **Proves:** a finding is not just a red count: it carries a category, a plain-language disagreement, and exact source-row references for review.
+4. **Pick one flagged deal** from the review list under "Advanced."
+   **Proves:** a flagged item isn't just a red count — it carries a category, a plain-language disagreement, and the exact source rows behind it.
 
-5. **Inject orphan** using the safe stress-test control.
-   **Proves:** a payout-only deal cannot disappear behind a false tie-out; it becomes a visible `ORPHAN_PAYOUT` while the CRM-scoped conservation equation remains honestly scoped.
+5. **Add a payout with no matching deal** using the stress-test button.
+   **Proves:** a payout with nothing behind it cannot disappear behind a false "all clear" — it shows up as a separate, named exception instead.
 
-6. **Export queue** as CSV.
-   **Proves:** the operational output is a portable review queue with deal ID, category, disagreement, and evidence—not a ceremonial visualization.
+6. **Export the review list** as CSV.
+   **Proves:** the output is a portable list with deal ID, category, disagreement, and evidence — not a ceremonial visualization.
 
-7. **Inspect AI/process logs** in [`llm_logs/`](llm_logs/README.md) and [`BUILD_LOG.md`](BUILD_LOG.md).
-   **Proves:** builder, audit, fixes, failed-tool adaptations, model-role boundaries, commits, and verification are disclosed rather than reconstructed as a success story.
+7. **Read the build log and AI disclosure** directly on the page, then open [`llm_logs/`](llm_logs/README.md) and [`BUILD_LOG.md`](BUILD_LOG.md) for the full detail.
+   **Proves:** builder, audits, fixes, failed-tool adaptations, and verification are disclosed rather than reconstructed as a success story.
 
 ## Deliberately out of scope
 

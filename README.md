@@ -25,7 +25,7 @@ browser-parity tests against the embedded engine. The untouched source bundle li
 
 ```bash
 make demo    # the CEO's questions answered in the terminal, with receipts
-make all     # verify all 86 citations + rebuild out/ + run the 80-test suite
+make all     # verify all 86 citations + rebuild out/ + run the 84-test suite
 ```
 
 ## The answers (60-second version, as of 2026-06-18 — the bundle's export date)
@@ -77,7 +77,7 @@ python3 recon.py fixture --seed 7 --outdir /tmp/f && \
 python3 recon.py run --crm /tmp/f/SYNTHETIC_crm_deals_2026-06.csv \
   --invoices /tmp/f/SYNTHETIC_invoices_2026-06.csv \
   --payouts /tmp/f/SYNTHETIC_payouts_2026-06.csv --outdir /tmp/f/out   # unseen seed, same guarantees
-make test                                       # 80 tests incl. browser/Python recon parity (Node.js) + fixture scoring
+make test                                       # 84 tests incl. browser/Python recon parity (Node.js) + fixture scoring
 ```
 
 Hand `recon.py run` any three CSVs matching the contract — a schema mismatch names the missing

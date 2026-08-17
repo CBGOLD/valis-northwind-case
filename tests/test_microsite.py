@@ -10,11 +10,24 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "index.html"
 README = ROOT / "README.md"
 RESULT = ROOT / "out" / "recon" / "result.json"
-REPO_URL = "https://github.com/CBGOLD/valis-northwind-case"
+
+# Phrases the live page must never lead with (reviewer feedback: "opens with
+# opaque language"). Checked against visible copy only (script contents are
+# code, not prose, and are excluded).
+BANNED_PHRASES = (
+    "verify two loose ends",
+    "bounded answer",
+    "gauntlet",
+)
 
 
 def site_text():
     return SITE.read_text(encoding="utf-8")
+
+
+def visible_copy():
+    """index.html minus its embedded <script> — i.e. what a reviewer reads."""
+    return re.sub(r"<script[\s\S]*?</script>", "", site_text())
 
 
 def run_embedded_javascript(command):
@@ -51,28 +64,118 @@ class TestExecutiveMicrosite(unittest.TestCase):
         self.assertIn("<style>", html)
         self.assertIn('<script id="recon-engine">', html)
 
-    def test_first_surface_has_verdict_and_exactly_three_decisions(self):
+    def test_all_local_links_are_relative_and_resolve_on_disk(self):
+        """Feedback: live links 404'd. Fix: prefer relative paths that resolve
+        both on GitHub Pages and when index.html is opened directly (no
+        network). Every non-anchor, non-http(s) href must point at a file
+        that actually exists in the repo."""
         html = site_text()
-        hero = re.search(r'<main[^>]*id="decide"[\s\S]*?</section>', html)
-        self.assertIsNotNone(hero, "Decide section must be the first main surface")
-        block = hero.group(0)
-        self.assertEqual(len(re.findall(r'data-decision=', block)), 3)
-        for key in ("saas-spend", "sales-hiring", "automate-first"):
-            decision = re.search(rf'<article[^>]+data-decision="{key}"[\s\S]*?</article>', block)
-            self.assertIsNotNone(decision)
-            self.assertIn("Confidence", decision.group(0))
-            self.assertIn("Next action", decision.group(0))
-        self.assertIn("$73,500", block)
-        self.assertIn("FROZEN", block)
-        self.assertIn("three-way reconciliation", block)
+        hrefs = re.findall(r'href="([^"]+)"', html)
+        local = [h for h in hrefs if not h.startswith(("http://", "https://", "#"))]
+        self.assertGreater(len(local), 5, "expected several relative proof links")
+        for href in local:
+            self.assertFalse(href.startswith("/"), f"{href} is not a relative path")
+            target = ROOT / href
+            self.assertTrue(target.exists(), f"relative link {href} does not resolve to a real file")
 
-    def test_real_answers_and_synthetic_demo_are_explicitly_separated(self):
+    def test_four_deliverables_are_visible_with_plain_labels_and_status(self):
         html = site_text()
-        self.assertIn("Real Northwind answers", html)
-        self.assertGreaterEqual(html.count("SYNTHETIC DEMO"), 2)
-        self.assertIn("NOT Northwind actuals", html)
-        self.assertIn("Nothing synthetic feeds the Northwind answers", html)
-        self.assertIn("as of 2026-06-18", html)
+        deliverables = re.search(r'<div class="deliverables"[\s\S]*?</div>\s*</div></section>', html)
+        self.assertIsNotNone(deliverables, "the four-deliverables scorecard must be present")
+        block = deliverables.group(0)
+        self.assertEqual(block.count('class="deliverable"'), 4)
+        for anchor in ("#answers", "#value", "#automation", "#buildlog"):
+            self.assertIn(f'href="{anchor}"', block)
+        for phrase in (
+            "Two answers, with sources",
+            "One number for the CFO",
+            "One automation, running",
+            "A build log",
+        ):
+            self.assertIn(phrase, block)
+        self.assertGreaterEqual(block.count("status-pill"), 4)
+        # This scorecard is the 30-second surface: it must appear before the
+        # detailed answers/value/automation sections, not after them.
+        self.assertLess(html.index('id="deliverables"'), html.index('id="answers"'))
+        self.assertLess(html.index('id="answers"'), html.index('id="value"'))
+        self.assertLess(html.index('id="value"'), html.index('id="automation"'))
+
+    def test_two_answers_have_headline_confidence_and_show_proof(self):
+        html = site_text()
+        for key, headline in (("saas-spend", "$73,500"), ("sales-hiring", "FROZEN")):
+            card = re.search(rf'<article[^>]+data-decision="{key}"[\s\S]*?</article>', html)
+            self.assertIsNotNone(card, f"missing answer card for {key}")
+            block = card.group(0)
+            self.assertIn(headline, block)
+            self.assertIn("Confidence", block)
+            self.assertIn("Next step", block)
+            self.assertIn("Show proof", block)
+            self.assertIn('class="receipt"', block)
+        self.assertIn("$81,000", html)
+
+    def test_value_number_states_baseline_arithmetic_unverified_and_decision(self):
+        html = site_text()
+        for phrase in (
+            "$81,000",
+            "$7,500",
+            "9.3%",
+            "$30,000",
+            "What's not verified",
+            "The decision this enables",
+            "docs/VALUE_NUMBER.md",
+        ):
+            self.assertIn(phrase, html)
+
+    def test_automation_section_has_one_primary_run_button_and_plain_before_after(self):
+        html = site_text()
+        automation = re.search(r'<section class="panel" id="automation">[\s\S]*?</section>', html)
+        self.assertIsNotNone(automation)
+        block = automation.group(0)
+        # exactly one primary Run control outside the advanced disclosure
+        primary_zone = block[: block.index('class="advanced-toggle"')]
+        self.assertEqual(primary_zone.count('id="run-recon"'), 1)
+        self.assertNotIn('id="inject-orphan"', primary_zone)
+        self.assertNotIn('id="export-exceptions"', primary_zone)
+        self.assertIn("Before", block)
+        self.assertIn("~3 days a month", block)
+        self.assertIn("stand-in file", block.lower())
+        # the honest, non-defensive one-sentence explanation of why synthetic data is used
+        self.assertIn("weren't in the bundle", block)
+        # advanced/secondary controls are present, just demoted
+        self.assertIn('id="inject-orphan"', block)
+        self.assertIn('id="export-exceptions"', block)
+        self.assertIn("Advanced:", block)
+
+    def test_no_prohibited_jargon_in_primary_copy(self):
+        copy = visible_copy()
+        for phrase in BANNED_PHRASES:
+            self.assertNotIn(phrase, copy.lower())
+        # "Conservation" / "Disposition" must not appear as bare UI labels
+        # (element ids like conservation-state are fine; the label text is not).
+        self.assertNotRegex(copy, r">\s*Conservation\s*<")
+        self.assertNotRegex(copy, r">\s*Disposition\s*<")
+
+    def test_ai_disclosure_present_and_concise_without_model_theatre(self):
+        html = site_text()
+        ai_section = re.search(r'<section class="panel" id="ai">[\s\S]*?</section>', html)
+        self.assertIsNotNone(ai_section)
+        block = ai_section.group(0)
+        self.assertIn("Claude", block)
+        self.assertIn("llm_logs", block)
+        for name in ("Fable", "Hermes", "Opus", "gpt-5", "GPT-5"):
+            self.assertNotIn(name, block)
+        word_count = len(re.sub(r"<[^>]+>", " ", block).split())
+        self.assertLess(word_count, 140, "AI disclosure should stay concise, not turn into a saga")
+
+    def test_build_log_timeline_is_visible_compact_and_timestamped(self):
+        html = site_text()
+        timeline = re.search(r'<ol class="timeline"[^>]*>([\s\S]*?)</ol>', html)
+        self.assertIsNotNone(timeline, "a visible build-log timeline must be embedded in the page")
+        items = re.findall(r"<li>.*?</li>", timeline.group(1))
+        self.assertGreaterEqual(len(items), 6)
+        for item in items:
+            self.assertRegex(item, r"<time>[^<]+</time>")
+        self.assertIn("BUILD_LOG.md", html)
 
     def test_browser_reconciliation_matches_python_baseline(self):
         browser = run_embedded_recon()
@@ -105,7 +208,7 @@ try {
 """)
         self.assertIn("duplicate deal_id BD-2606-01 in CRM export", output)
         self.assertIn("SYNTHETIC_crm_deals_2026-06.csv:999", output)
-        self.assertIn("Reconciliation failed", site_text())
+        self.assertIn('id="run-status"', site_text())
 
     def test_orphan_injection_is_safe_visible_and_exportable(self):
         html = site_text()
@@ -119,19 +222,12 @@ try {
         self.assertEqual(injected["conservation"]["orphanPayoutCents"], 500000)
         self.assertTrue(injected["disposition"]["complete"])
 
-    def test_recon_surface_shows_flow_counts_taxonomy_rows_and_before_after(self):
-        html = site_text()
-        for phrase in (
-            "CRM → invoices → payouts", "Matched", "Exception deals", "Conservation",
-            "Exception taxonomy", "Row evidence", "Before", "After",
-        ):
-            self.assertIn(phrase, html)
-        self.assertIn('id="run-recon"', html)
-        self.assertIn('aria-live="polite"', html)
-
     def test_row_evidence_table_has_an_accessible_name(self):
         html = site_text()
-        self.assertRegex(html, r'<h3 id="row-evidence-title">Row evidence</h3>[\s\S]*?<table aria-labelledby="row-evidence-title">')
+        self.assertRegex(
+            html,
+            r'<h4 id="row-evidence-title">The review list</h4>[\s\S]*?<table aria-labelledby="row-evidence-title">',
+        )
 
     def test_exception_csv_has_header_row_count_and_rfc4180_escaping(self):
         exceptions = [
@@ -158,18 +254,16 @@ try {
         self.assertIn('"comma, quote "" and\nnewline"', exported)
         self.assertTrue(exported.endswith("\r\n"))
 
-    def test_evidence_and_method_views_link_to_repository(self):
+    def test_proof_section_links_to_evidence_with_relative_paths(self):
         html = site_text()
-        for section in ("evidence", "method"):
-            self.assertIn(f'id="{section}"', html)
+        self.assertIn('id="proof"', html)
         for path in (
-            "evidence/citations.json", "out/AUDIT.md", "docs/DECISIONS.md",
-            "docs/BUILDER_SPEC.md", "BUILD_LOG.md",
+            "evidence/citations.json", "out/AUDIT.md", "docs/DECISIONS.md", "REVIEW_GUIDE.md",
         ):
-            self.assertIn(f'href="{REPO_URL}/blob/main/{path}"', html)
-        self.assertIn(f'href="{REPO_URL}/tree/main/llm_logs/"', html)
-        self.assertIn(f'href="{REPO_URL}"', html)
+            self.assertIn(f'href="{path}"', html)
         self.assertIn("86 citations", html)
+        self.assertIn("86 receipts", html)
+        self.assertIn('href="https://github.com/CBGOLD/valis-northwind-case"', html)
 
     def test_accessibility_print_and_anti_slop_contract(self):
         html = site_text().lower()

@@ -94,3 +94,12 @@ All times CEST. This log records real work only; no timestamps are backfilled.
 - `git diff --check`, added-line secret/injection scan, final-log absolute-path/email/credential/hook/thinking/signature/workstation-skill scan, manifest hash/path verification, and byte-identical Fable re-export all passed.
 - No push or publication was performed; the release-prep commit remains local for human review.
 
+## 2026-08-17
+
+### 16:18 CEST — Reviewer-friction pass verified
+- Re-read the exercise, CEO context/questions, interview coaching state, existing evidence, value worksheet, build history, and the live page before editing.
+- Rebuilt the public page around the four requested deliverables, direct CEO answers, a plain-English CFO number, one primary automation action, and a visible timestamped build timeline.
+- Replaced unstable public links with relative repository paths and added deterministic local-link coverage.
+- Ran `make clean && make all`: **86/86 citations verified**, baseline **20/28 auto-cleared**, **8 findings**, conservation `TIES OUT`, and **84/84 tests passed**.
+- Browser review confirmed the four deliverables are visible in the first viewport, the synthetic boundary is explicit, and advanced failure/export controls remain available without dominating the main path.
+
