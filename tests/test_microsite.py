@@ -145,6 +145,12 @@ class TestExecutiveMicrosite(unittest.TestCase):
         self.assertIn('id="inject-orphan"', block)
         self.assertIn('id="export-exceptions"', block)
         self.assertIn("Advanced:", block)
+        # A completed run must be impossible to miss: reveal/focus results and relabel the button.
+        self.assertIn('id="run-results"', block)
+        self.assertIn('tabindex="-1"', block)
+        self.assertIn("scrollIntoView", html)
+        self.assertIn("runResults.focus", html)
+        self.assertIn("✓ Ran — run again", html)
 
     def test_no_prohibited_jargon_in_primary_copy(self):
         copy = visible_copy()
